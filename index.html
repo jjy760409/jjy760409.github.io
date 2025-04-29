@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AgriNexus World - Official Digital Business Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #012a1c;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(160deg, #012a1c, #014d27);
       color: #FFD700;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
-      animation: fadeIn 2s ease;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 40px 20px;
+      animation: fadeIn 1.5s ease-in;
     }
 
     @keyframes fadeIn {
@@ -23,36 +25,39 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .card {
-      background: #014d27;
-      border: 2px solid #FFD700;
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-      width: 300px;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-      margin-top: 20px;
-    }
-
     img.logo {
-      width: 200px;
+      width: 180px;
       height: auto;
       margin: 20px 0;
     }
 
     h1 {
-      font-size: 2em;
+      font-size: 2.2em;
       margin: 10px 0;
+      font-weight: 600;
     }
 
     p.subtitle {
       font-size: 1em;
       margin-bottom: 30px;
+      color: #FFE066;
+    }
+
+    .card {
+      background: rgba(1, 44, 28, 0.85);
+      border: 2px solid #FFD700;
+      border-radius: 25px;
+      padding: 35px 25px;
+      text-align: center;
+      width: 320px;
+      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.25);
+      backdrop-filter: blur(4px);
     }
 
     .name {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #FFD700;
       margin-top: 20px;
     }
 
@@ -60,44 +65,46 @@
       font-size: 1em;
       margin-top: 5px;
       margin-bottom: 20px;
+      color: #FFE066;
     }
 
     .buttons a {
       display: inline-block;
-      margin: 10px 5px;
-      padding: 10px 20px;
+      margin: 10px 8px;
+      padding: 10px 22px;
       border: 2px solid #FFD700;
-      border-radius: 20px;
+      border-radius: 30px;
       color: #FFD700;
+      font-weight: 500;
       text-decoration: none;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
 
     .buttons a:hover {
       background: #FFD700;
       color: #014d27;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
     }
 
     footer {
-      margin-top: 30px;
+      margin-top: 40px;
       font-size: 0.8em;
       color: #aaaaaa;
       text-align: center;
     }
   </style>
 </head>
-
 <body>
 
   <div>Official Digital Business Card Landing Page</div>
 
-  <img src="logo.png" alt="AgriNexus World Logo" class="logo">
+  <img src="agrinexusworld_3dset.png" alt="AgriNexus World Logo" class="logo" />
 
   <h1>AgriNexus World</h1>
   <p class="subtitle">Agricultural Innovation for a Sustainable Future</p>
 
   <div class="card">
-    <img src="logo.png" alt="AgriNexus Card Logo" class="logo">
+    <img src="agrinexusworld_3dset.png" alt="AgriNexus Card Logo" class="logo" />
     <div class="name">jung jae yoon</div>
     <div class="title">Chief General Manager</div>
     <div class="buttons">
