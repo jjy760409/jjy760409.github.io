@@ -1,0 +1,127 @@
+디지털 명함 공식 랜딩페이지
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriNexus World - Official Digital Business Card</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #012a1c;
+    color: #FFD700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+    animation: fadeIn 2s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  header img {
+    width: 150px;
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    margin: 0;
+  }
+
+  .card {
+    background: #014d27;
+    border: 2px solid #FFD700;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    margin-bottom: 30px;
+    animation: slideUp 1.5s ease;
+  }
+
+  @keyframes slideUp {
+    from {transform: translateY(50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+
+  .card img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .name {
+    font-size: 1.8em;
+    font-weight: bold;
+  }
+
+  .title {
+    font-size: 1em;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    color: #FFE066;
+  }
+
+  .buttons a {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    border: 2px solid #FFD700;
+    border-radius: 30px;
+    color: #FFD700;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .buttons a:hover {
+    background: #FFD700;
+    color: #014d27;
+  }
+
+  footer {
+    margin-top: 30px;
+    font-size: 0.8em;
+    color: #aaaaaa;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Example.jpg/320px-Example.jpg" alt="AgriNexus World Logo">
+  <h1>AgriNexus World</h1>
+  <p>Innovating Agriculture for a Sustainable Future</p>
+</header>
+
+<div class="card">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Example.jpg/320px-Example.jpg" alt="AgriNexus World Business Card">
+  <div class="name">JUNG JAE YOON</div>
+  <div class="title">Chief General Manager</div>
+  <div class="buttons">
+    <a href="tel:01025833003">Call</a>
+    <a href="mailto:info@agrinexusworld.com">Email</a>
+    <a href="data:text/vcard;charset=utf-8,BEGIN:VCARD%0AVERSION:3.0%0AN%3AJae%20Yoon%3BJung%0AFN%3AJung%20Jae%20Yoon%0AORG%3AAgriNexus%20World%0ATITLE%3AChief%20General%20Manager%0ATEL%3BTYPE%3Dcell%3A010-2583-3003%0AEMAIL%3Ainfo%40agrinexusworld.com%0AEND:VCARD" download="jungjaeyoon.vcf">Save Contact</a>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 AgriNexus World. All Rights Reserved.
+</footer>
+
+</body>
+</html>
