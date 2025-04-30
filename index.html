@@ -1,152 +1,71 @@
+import os
+from zipfile import ZipFile
+
+# Create folder for the new version of the site (to replace existing index.html)
+folder_path = "/mnt/data/agrinexus_new_site"
+os.makedirs(folder_path, exist_ok=True)
+
+# New version of index.html (replacing the business card style with info site)
+index_html = """
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World - Official Digital Business Card</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(160deg, #012a1c, #014d27);
-      color: #FFD700;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      min-height: 100vh;
-      padding: 40px 20px;
-      animation: fadeIn 1.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    img.logo {
-      width: 180px;
-      height: auto;
-      margin: 20px 0;
-    }
-
-    h1 {
-      font-size: 2.2em;
-      margin: 10px 0;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    p.subtitle {
-      font-size: 1em;
-      margin-bottom: 30px;
-      color: #FFE066;
-      text-align: center;
-    }
-
-    .card {
-      background: rgba(1, 44, 28, 0.85);
-      border: 2px solid #FFD700;
-      border-radius: 25px;
-      padding: 35px 25px;
-      text-align: center;
-      width: 100%;
-      max-width: 340px;
-      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.25);
-      backdrop-filter: blur(4px);
-    }
-
-    .name {
-      font-size: 1.4em;
-      font-weight: 600;
-      color: #FFD700;
-      margin-top: 20px;
-    }
-
-    .title {
-      font-size: 1em;
-      margin-top: 5px;
-      margin-bottom: 20px;
-      color: #FFE066;
-    }
-
-    .buttons a {
-      display: inline-block;
-      margin: 10px 8px;
-      padding: 10px 22px;
-      border: 2px solid #FFD700;
-      border-radius: 30px;
-      color: #FFD700;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .buttons a:hover {
-      background: #FFD700;
-      color: #014d27;
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-    }
-
-    .qr {
-      margin-top: 30px;
-    }
-
-    .qr img {
-      width: 120px;
-      height: auto;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.8em;
-      color: #aaaaaa;
-      text-align: center;
-    }
-
-    @media (max-width: 480px) {
-      .buttons a {
-        margin: 6px;
-        padding: 10px 18px;
-        font-size: 0.9em;
-      }
-
-      .card {
-        padding: 25px 20px;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriNexus World - 스마트팜 플랫폼</title>
 </head>
 <body>
+  <header>
+    <h1>🌍 AgriNexus World</h1>
+    <p>AI 기반 스마트팜 · 글로벌 물류 · 자동화 제안 시스템</p>
+    <nav>
+      <a href="about.html">회사소개</a> |
+      <a href="downloads.html">자료실</a> |
+      <a href="admin.html">관리자</a>
+    </nav>
+  </header>
 
-  <div>Official Digital Business Card Landing Page</div>
-
-  <img src="agrinexusworld_3dset.png" alt="AgriNexus World Logo" class="logo" />
-
-  <h1>AgriNexus World</h1>
-  <p class="subtitle">Agricultural Innovation for a Sustainable Future</p>
-
-  <div class="card">
-    <img src="agrinexusworld_3dset.png" alt="AgriNexus Card Logo" class="logo" />
-    <div class="name">jung jae yoon</div>
-    <div class="title">Chief General Manager</div>
-    <div class="buttons">
-      <a href="tel:010-2583-3003">Call</a>
-      <a href="mailto:info@agrinexusworld.com">Email</a>
-      <a href="contact.vcf" download>Save Contact</a>
-    </div>
-    <div class="qr">
-      <img src="d2782253-474b-41dc-bfd5-ba84c9d2fd7f.png" alt="QR Code">
-    </div>
-  </div>
+  <main>
+    <section>
+      <h2>핵심 서비스</h2>
+      <ul>
+        <li>🌱 스마트팜 재배 설계 및 자동화 운영</li>
+        <li>🚚 글로벌 물류 최적화 시스템</li>
+        <li>🧠 AI 작물 추천 + 수익 분석</li>
+        <li>📄 제안서 및 계약서 자동 생성</li>
+        <li>📥 IR 보고서 및 PDF 자동 배포</li>
+      </ul>
+    </section>
+  </main>
 
   <footer>
-    © 2025 AgriNexus World. All Rights Reserved.
+    <p>© 2025 AgriNexus World. All rights reserved.</p>
   </footer>
-
 </body>
 </html>
+"""
+with open(os.path.join(folder_path, "index.html"), "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+# Simple subpages to include in the package
+subpages = {
+    "about.html": "<h2>회사 소개</h2><p>AgriNexus World는 글로벌 스마트팜을 위한 AI 기반 플랫폼입니다.</p>",
+    "downloads.html": "<h2>자료실</h2><ul><li>제안서 샘플</li><li>브랜드 소개서</li></ul>",
+    "admin.html": "<h2>관리자 페이지</h2><p>콘텐츠 관리 기능은 추후 제공됩니다.</p>"
+}
+
+# Create subpages
+for filename, content in subpages.items():
+    with open(os.path.join(folder_path, filename), "w", encoding="utf-8") as f:
+        f.write(f"<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'><title>{filename}</title></head><body>{content}</body></html>")
+
+# Create ZIP for download
+zip_path = "/mnt/data/AgriNexus_NewSite_ReplaceVersion.zip"
+with ZipFile(zip_path, 'w') as zipf:
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            arcname = os.path.relpath(file_path, folder_path)
+            zipf.write(file_path, arcname)
+
+zip_path
