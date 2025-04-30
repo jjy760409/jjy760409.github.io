@@ -1,40 +1,39 @@
 import os
 from zipfile import ZipFile
 
-# Create folder for the new version of the site (to replace existing index.html)
-folder_path = "/mnt/data/agrinexus_new_site"
+# Re-create folder structure for full manual HTML site
+folder_path = "/mnt/data/agrinexus_manual_full_site"
 os.makedirs(folder_path, exist_ok=True)
 
-# New version of index.html (replacing the business card style with info site)
+# index.html content
 index_html = """
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AgriNexus World - 스마트팜 플랫폼</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>🌍 AgriNexus World</h1>
-    <p>AI 기반 스마트팜 · 글로벌 물류 · 자동화 제안 시스템</p>
+    <p>AI 스마트팜 · 물류 자동화 · 전자동 제안 시스템</p>
     <nav>
-      <a href="about.html">회사소개</a> |
-      <a href="downloads.html">자료실</a> |
+      <a href="index.html">홈</a>
+      <a href="about.html">회사소개</a>
+      <a href="downloads.html">자료실</a>
+      <a href="proposal.html">AI 제안서</a>
       <a href="admin.html">관리자</a>
     </nav>
   </header>
 
   <main>
-    <section>
-      <h2>핵심 서비스</h2>
-      <ul>
-        <li>🌱 스마트팜 재배 설계 및 자동화 운영</li>
-        <li>🚚 글로벌 물류 최적화 시스템</li>
-        <li>🧠 AI 작물 추천 + 수익 분석</li>
-        <li>📄 제안서 및 계약서 자동 생성</li>
-        <li>📥 IR 보고서 및 PDF 자동 배포</li>
-      </ul>
+    <section class="cards">
+      <div class="card">🌱 스마트팜 설계/운영</div>
+      <div class="card">🧠 AI 작물 추천</div>
+      <div class="card">🚚 글로벌 물류 연동</div>
+      <div class="card">📄 자동 계약서/제안서</div>
     </section>
   </main>
 
@@ -44,24 +43,84 @@ index_html = """
 </body>
 </html>
 """
-with open(os.path.join(folder_path, "index.html"), "w", encoding="utf-8") as f:
-    f.write(index_html)
 
-# Simple subpages to include in the package
+# CSS style
+style_css = """
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0; padding: 0;
+  background: #f2f2f2;
+  color: #222;
+}
+header {
+  background: linear-gradient(to right, #00b894, #0984e3);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+nav {
+  margin-top: 10px;
+}
+nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+main {
+  padding: 20px;
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  flex: 1 1 200px;
+  max-width: 300px;
+  text-align: center;
+}
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #ddd;
+}
+"""
+
+# Subpages
 subpages = {
-    "about.html": "<h2>회사 소개</h2><p>AgriNexus World는 글로벌 스마트팜을 위한 AI 기반 플랫폼입니다.</p>",
-    "downloads.html": "<h2>자료실</h2><ul><li>제안서 샘플</li><li>브랜드 소개서</li></ul>",
-    "admin.html": "<h2>관리자 페이지</h2><p>콘텐츠 관리 기능은 추후 제공됩니다.</p>"
+    "about.html": "<h2>회사 소개</h2><p>AgriNexus World는 글로벌 스마트팜 자동화 플랫폼입니다.</p>",
+    "downloads.html": "<h2>자료실</h2><ul><li><a href='#'>제안서 샘플 PDF</a></li><li><a href='#'>디지털 명함 PDF</a></li></ul>",
+    "proposal.html": '''
+      <h2>AI 제안서 요청</h2>
+      <form>
+        <label>면적(m²): <input type="number" name="area"></label><br>
+        <label>재배 목적: <input type="text" name="purpose"></label><br>
+        <label>지역: <input type="text" name="location"></label><br>
+        <button type="submit">제안서 생성</button>
+      </form>
+      <p>※ 실제 AI 기능은 서버 기반에서 작동됩니다.</p>
+    ''',
+    "admin.html": "<h2>관리자 페이지</h2><p>콘텐츠와 요청 내역을 확인할 수 있습니다.</p>"
 }
 
-# Create subpages
+# Save files
+with open(os.path.join(folder_path, "index.html"), "w", encoding="utf-8") as f:
+    f.write(index_html)
+with open(os.path.join(folder_path, "style.css"), "w", encoding="utf-8") as f:
+    f.write(style_css)
 for filename, content in subpages.items():
     with open(os.path.join(folder_path, filename), "w", encoding="utf-8") as f:
-        f.write(f"<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'><title>{filename}</title></head><body>{content}</body></html>")
+        f.write(f"<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'><title>{filename}</title><link rel='stylesheet' href='style.css'></head><body>{content}</body></html>")
 
-# Create ZIP for download
-zip_path = "/mnt/data/AgriNexus_NewSite_ReplaceVersion.zip"
-with ZipFile(zip_path, 'w') as zipf:
+# Create zip for download
+zip_path = "/mnt/data/AgriNexus_Full_Manual_HTML.zip"
+with ZipFile(zip_path, "w") as zipf:
     for root, _, files in os.walk(folder_path):
         for file in files:
             file_path = os.path.join(root, file)
