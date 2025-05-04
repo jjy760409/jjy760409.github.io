@@ -1106,7 +1106,55 @@ async function analyzeSMELogistics() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📚 수출입 문서 용어 해석 + 법률 해결 자동 시스템</h2>
+<p>수출입 계약서, 통관 문서 등에서 어려운 물류 용어와 각국 법률 사안을 자동으로 해석하고 해결 가이드를 제시합니다.</p>
+
+<textarea id="documentText" placeholder="문서 내용을 붙여넣으세요 (예: 계약서 조항, 통관 문장 등)" style="width:100%;height:100px;padding:10px;"></textarea>
+<button onclick="explainDocumentTerms()" style="padding:10px 20px;">🧠 문서 해석 및 해결안 생성</button>
+
+<div id="documentExplainResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function explainDocumentTerms() {
+  const doc = document.getElementById("documentText").value.trim();
+  if (!doc) return alert("문서 내용을 입력해 주세요.");
+  document.getElementById("documentExplainResult").innerText = "📘 용어 해석 및 해결 방법 분석 중...";
+
+  const prompt = `
+다음 문서 또는 계약서 조항 내용을 기반으로,
+1. 전문 용어를 알기 쉽게 해석하고
+2. 포함된 수출입 법률적 요소를 한국과 주요 국가 기준으로 설명하고
+3. 자주 발생하는 문제 및 분쟁을 예방할 수 있는 해결 방법을 제안해 주세요.
+4. 초보자도 쉽게 이해할 수 있도록 쉬운 표현으로 작성해 주세요.
+
+문서 내용:
+${doc}
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("documentExplainResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    document.getElementById("documentExplainResult").innerText = "❌ 해석 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
