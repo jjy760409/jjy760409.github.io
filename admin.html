@@ -403,7 +403,79 @@ async function exportToSheets() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📊 피드백 점수 통계 시각화</h2>
+<button onclick="drawFeedbackChart()" style="padding:8px 16px;">📈 통계 보기</button>
+<canvas id="feedbackChart" width="400" height="200" style="margin-top:20px;"></canvas>
+
+<script>
+function drawFeedbackChart() {
+  firebase.database().ref("agrinexus_feedback/admin-feedback").once("value", snapshot => {
+    const data = snapshot.val();
+    const scores = [0, 0, 0, 0, 0];
+    for (let key in data) {
+      const s = data[key].score;
+      if (s >= 1 && s <= 5) scores[s - 1]++;
+    }
+    const ctx = document.getElementById("feedbackChart").getContext("2d");
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['⭐1', '⭐2', '⭐3', '⭐4', '⭐5'],
+        datasets: [{
+          label: '제출된 피드백 수',
+          data: scores,
+          backgroundColor: '#ffc107'
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  });
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📤 실연동용 Google Sheets App Script 코드</h2>
+<pre style="background:#eee;padding:10px;font-size:0.8rem;overflow-x:auto;">
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  data.values.forEach(row => {
+    sheet.appendRow([new Date(), row]);
+  });
+  return ContentService.createTextOutput("success");
+}
+</pre>
+
+<p>📝 위 코드를 Google Apps Script에 붙여넣고 웹앱으로 배포하세요.<br>
+사용 권한: 누구나 접근 / POST 요청 허용</p>
+
+<hr style="margin:40px 0;">
+<h2>🧠 사용자 질문 기반 AI 보정 요청</h2>
+<p>GPT가 부정확한 분류를 했다면 아래에 보정 요청을 입력해 주세요.</p>
+<textarea id="aiCorrection" rows="3" style="width:100%;padding:8px;"></textarea><br>
+<button onclick="submitCorrection()" style="margin-top:10px;padding:8px 16px;">보정 요청 제출</button>
+<div id="correctionStatus" style="margin-top:10px;color:green;"></div>
+
+<script>
+function submitCorrection() {
+  const text = document.getElementById("aiCorrection").value.trim();
+  if (!text) return alert("내용을 입력해 주세요.");
+  const time = Date.now();
+  firebase.database().ref("agrinexus_training").push({
+    correction: text,
+    timestamp: time
+  });
+  document.getElementById("correctionStatus").innerText = "✅ 보정 요청이 저장되었습니다.";
+  document.getElementById("aiCorrection").value = "";
+}
+</script>
+
 </body>
+
 
 
 
