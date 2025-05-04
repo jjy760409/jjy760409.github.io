@@ -106,8 +106,78 @@
     </style>
 
 <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js">
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js">
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
+</script>
 <script>
   const firebaseConfig = {
     apiKey: "YOUR_FIREBASE_API_KEY",
@@ -120,12 +190,152 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
 </script>
 
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js">
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js">
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js">
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
+</script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDemoKey00000000000000000000000000",
@@ -154,6 +364,41 @@
   function getCurrentUserId() {
     return auth.currentUser ? auth.currentUser.uid : "guest";
   }
+
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
+}
 </script>
 
 </head>
@@ -214,7 +459,15 @@
 <div id="chatbox">
 <button onclick="loginWithGoogle()" style="width:100%;padding:8px;background:#f4f4f4;border:none;">🔐 Login with Google</button> style="display:none;position:fixed;bottom:90px;right:20px;width:300px;height:400px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:999;">
   <div style="background:#198754;color:#fff;padding:10px;font-weight:bold;">AgriBot 🤖</div>
-  <div id="chatlog" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;display:flex;flex-direction:column;gap:10px;" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;"></div>
+  
+<div id="chatlog"
+<div style="margin-top:10px;">
+  <button onclick="showRecommendations()" style="width:100%;padding:10px;background:#198754;color:white;border:none;border-radius:8px;">
+    🎯 추천 항목 보기
+  </button>
+  <div id="recommendations" style="margin-top:10px;font-size:0.9rem;"></div>
+</div>
+ style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;display:flex;flex-direction:column;gap:10px;" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;"></div>
   <div style="display:flex;border-top:1px solid #ccc;">
     <input id="userInput" placeholder="Type your message..." type="text" placeholder="Ask me..." style="flex:1;padding:8px;border:none;outline:none;">
     <button onclick="sendMessage()" style="background:#198754;color:white;border:none;padding:8px 12px;">Send</button>
@@ -341,6 +594,41 @@ async function sendMessage() {
   saveChatLog();
 
   chatlog.scrollTop = chatlog.scrollHeight;
+}
+
+function showRecommendations() {
+  const input = document.getElementById("userInput").value.trim();
+  const lang = document.getElementById("langSelect").value;
+  if (!input) {
+    alert("추천을 위해 질문을 입력해 주세요.");
+    return;
+  }
+
+  fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: `Based on the following user question, provide 3 helpful recommendations or follow-ups in ${lang === 'ko' ? 'Korean' : lang === 'ja' ? 'Japanese' : 'English'}:
+
+${input}`
+      }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("recommendations").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  })
+  .catch(err => {
+    console.error(err);
+    alert("추천을 불러오는 데 실패했습니다.");
+  });
 }
 </script>
 </body>

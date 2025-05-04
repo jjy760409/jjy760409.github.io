@@ -1,1 +1,55 @@
-<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'><title>admin.html</title><link rel='stylesheet' href='style.css'></head><body><h2>관리자 화면</h2><p>제안서/요청 내역 관리 기능은 추후 구현됩니다.</p></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus Admin Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }
+    h1 { color: #198754; }
+    .log { background: white; border-radius: 10px; padding: 10px; margin: 10px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .uid { font-weight: bold; color: #333; }
+    .msg { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>📊 AgriNexus 관리자 대시보드</h1>
+  <div id="logs">불러오는 중...</div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDemoKey00000000000000000000000000",
+      authDomain: "agrinexus-demo.firebaseapp.com",
+      databaseURL: "https://agrinexus-demo-default-rtdb.firebaseio.com",
+      projectId: "agrinexus-demo",
+      storageBucket: "agrinexus-demo.appspot.com",
+      messagingSenderId: "000000000000",
+      appId: "1:000000000000:web:demoapp"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const logsDiv = document.getElementById("logs");
+    db.ref("agrinexus_chat").on("value", snapshot => {
+      logsDiv.innerHTML = "";
+      const data = snapshot.val();
+      for (let uid in data) {
+        const userLogs = data[uid];
+        for (let key in userLogs) {
+          const entry = userLogs[key];
+          const log = document.createElement("div");
+          log.className = "log";
+          log.innerHTML = `
+            <div class="uid">👤 사용자: ${uid}</div>
+            <div class="msg"><strong>${entry.sender}:</strong> ${entry.message}</div>
+            <div class="msg">🌐 언어: ${entry.lang || "N/A"}</div>
+          `;
+          logsDiv.appendChild(log);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
