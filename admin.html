@@ -926,7 +926,127 @@ async function analyzeAdvancedLogistics() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📄 실 견적서 자동 생성 및 전송 시스템</h2>
+<p>자동 분석된 물류 정보를 바탕으로 견적서를 PDF로 생성하고 이메일 전송합니다.</p>
+<input type="email" id="estimateEmail" placeholder="받는 이메일 주소" style="padding:8px;width:300px;" />
+<button onclick="generateEstimatePDF()" style="padding:8px 16px;">🧾 견적서 PDF 생성</button>
+<button onclick="sendEstimateEmail()" style="padding:8px 16px;">📬 견적서 이메일 전송</button>
+<div id="estimateStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function generateEstimatePDF() {
+  const content = document.getElementById("advancedLogisticsResult").innerText;
+  if (!content) return alert("먼저 분석을 실행해 주세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const lines = content.split('\n');
+  lines.forEach((line, i) => doc.text(line, 10, 10 + i * 10));
+  doc.save("AgriNexus_Estimate.pdf");
+  document.getElementById("estimateStatus").innerText = "✅ PDF 생성 완료!";
+}
+
+function sendEstimateEmail() {
+  const email = document.getElementById("estimateEmail").value.trim();
+  if (!email) return alert("이메일을 입력해 주세요.");
+  document.getElementById("estimateStatus").innerText = "📬 이메일 전송 중... (시뮬레이션)";
+  setTimeout(() => {
+    document.getElementById("estimateStatus").innerText = "✅ 이메일 전송 완료! (시뮬레이션)";
+  }, 1500);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📦 컨테이너 단가 자동 비교</h2>
+<p>일반/냉장/20ft/40ft 컨테이너 운송 비용 비교 분석</p>
+<button onclick="compareContainerRates()" style="padding:8px 16px;">📊 단가 비교 실행</button>
+<div id="containerRateResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function compareContainerRates() {
+  document.getElementById("containerRateResult").innerText = "📦 컨테이너 단가 분석 중...";
+  const prompt = `
+20ft, 40ft, 냉장, 특수 컨테이너 운송 시 평균 단가 비교 분석 보고서를 작성해 주세요.
+- 항공 vs 해상 비교 포함
+- 수출입 국가에 따라 가격 차이 예시도 포함
+- 적합한 용도와 상황별 추천도 제시
+  `;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("containerRateResult").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🛡️ 보험 조건 자동 제안</h2>
+<button onclick="suggestInsuranceTerms()" style="padding:8px 16px;">🧾 보험 분석 실행</button>
+<div id="insuranceSuggestion" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function suggestInsuranceTerms() {
+  document.getElementById("insuranceSuggestion").innerText = "🛡️ 보험 조건 분석 중...";
+  const prompt = `
+국제물류에 필요한 보험 항목을 분석하고, 일반화물, 고가품, 냉동품, 위험물 등 조건별 적절한 보험 범위와
+추천 보험사를 제안해 주세요.
+  `;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("insuranceSuggestion").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🌐 국가별 물류 이슈 실시간 반영</h2>
+<button onclick="fetchLogisticsIssues()" style="padding:8px 16px;">🌍 이슈 조회</button>
+<div id="logisticsIssues" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function fetchLogisticsIssues() {
+  document.getElementById("logisticsIssues").innerText = "🌐 전세계 물류 이슈 조회 중...";
+  const prompt = `
+전세계 주요 국가의 현재 물류 지연, 항만 정체, 항공 운항 중단, 통관 이슈 등을 정리해 주세요.
+특히 한국, 미국, 유럽, 중국, 일본 위주로 최신 문제를 정리해 주세요.
+  `;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("logisticsIssues").innerText = data.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
