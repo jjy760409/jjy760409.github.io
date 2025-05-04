@@ -2136,7 +2136,92 @@ function saveExportComparePDF() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🧾 계약서 자동 버전 관리 시스템</h2>
+<input type="text" id="contractVersionInput" placeholder="버전명 (예: v1.0, 2024-01)" style="padding:8px;width:200px;" />
+<textarea id="contractVersionContent" placeholder="계약서 내용" style="width:100%;height:80px;padding:8px;"></textarea>
+<button onclick="saveContractVersion()" style="padding:8px 16px;">💾 저장</button>
+<select id="versionSelect" onchange="loadContractVersion()" style="margin-left:10px;padding:6px;"></select>
+<div id="versionStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function saveContractVersion() {
+  const key = document.getElementById("contractVersionInput").value.trim();
+  const content = document.getElementById("contractVersionContent").value.trim();
+  if (!key || !content) return alert("버전명과 내용을 입력해 주세요.");
+  const versions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  versions[key] = content;
+  localStorage.setItem("contract_versions", JSON.stringify(versions));
+  updateVersionList();
+  document.getElementById("versionStatus").innerText = `✅ ${key} 저장 완료`;
+}
+
+function updateVersionList() {
+  const versions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const select = document.getElementById("versionSelect");
+  select.innerHTML = "";
+  Object.keys(versions).forEach(k => {
+    const opt = document.createElement("option");
+    opt.value = k;
+    opt.textContent = k;
+    select.appendChild(opt);
+  });
+}
+
+function loadContractVersion() {
+  const key = document.getElementById("versionSelect").value;
+  const versions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  document.getElementById("contractVersionContent").value = versions[key] || "";
+  document.getElementById("versionStatus").innerText = `📂 ${key} 불러오기 완료`;
+}
+
+window.onload = updateVersionList;
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🌐 사용자 위치 기반 콘텐츠 자동 노출</h2>
+<button onclick="detectAndShowLocale()" style="padding:8px 16px;">🌍 지역 콘텐츠 표시</button>
+<div id="localeContent" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function detectAndShowLocale() {
+  const res = await fetch("https://ipapi.co/json/");
+  const data = await res.json();
+  const country = data.country_name;
+  let message = "🌎 글로벌 이용자입니다. 영어 페이지가 표시됩니다.";
+  if (country === "Korea") message = "🇰🇷 한국 사용자입니다. 한국어 콘텐츠가 표시됩니다.";
+  else if (country === "Japan") message = "🇯🇵 일본 사용자입니다. 일본어 콘텐츠가 표시됩니다.";
+  else if (country === "China") message = "🇨🇳 중국 사용자입니다. 중국어 콘텐츠가 표시됩니다.";
+  document.getElementById("localeContent").innerText = message;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🗂 PDF 자동 분류 및 보관 시스템 (시뮬레이션)</h2>
+<select id="pdfType" style="padding:6px;">
+  <option value="contract">계약서</option>
+  <option value="quote">견적서</option>
+</select>
+<textarea id="pdfContentInput" placeholder="PDF 내용 입력" style="width:100%;height:80px;padding:8px;"></textarea>
+<button onclick="archivePDFByType()" style="padding:8px 16px;">📦 저장</button>
+<div id="archiveStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function archivePDFByType() {
+  const type = document.getElementById("pdfType").value;
+  const content = document.getElementById("pdfContentInput").value.trim();
+  if (!content) return alert("내용을 입력해 주세요.");
+  const key = `pdf_${type}_archive`;
+  const list = JSON.parse(localStorage.getItem(key) || "[]");
+  list.push({ content, saved: new Date().toISOString() });
+  localStorage.setItem(key, JSON.stringify(list));
+  document.getElementById("archiveStatus").innerText = `✅ ${type === "contract" ? "계약서" : "견적서"} 보관 완료`;
+}
+</script>
+
 </body>
+
 
 
 
