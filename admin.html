@@ -2448,7 +2448,68 @@ function updateSignatureDashboard() {
 window.onload = updateSignatureDashboard;
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🔍 계약서 내용 변경 감지 및 알림</h2>
+<button onclick="detectContractChanges()" style="padding:8px 16px;">📢 변경 감지 실행</button>
+<div id="changeDetectionStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function detectContractChanges() {
+  const current = document.getElementById("contractVersionContent").value;
+  const previous = localStorage.getItem("last_contract_snapshot") || "";
+  if (current !== previous) {
+    localStorage.setItem("last_contract_snapshot", current);
+    document.getElementById("changeDetectionStatus").innerText = "⚠️ 계약서 내용이 변경되었습니다! (알림 발생)";
+  } else {
+    document.getElementById("changeDetectionStatus").innerText = "✅ 변경 없음 (동일한 상태)";
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🗃 서명 완료 시 계약서 자동 보관</h2>
+<button onclick="archiveSignedContracts()" style="padding:8px 16px;">📥 서명된 계약서 보관함 이동</button>
+<div id="archiveConfirm" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function archiveSignedContracts() {
+  const sigData = JSON.parse(localStorage.getItem("signature_status") || "{}");
+  const allVersions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const archive = [];
+  Object.keys(sigData).forEach(id => {
+    if (sigData[id] === "signed" && allVersions[id]) {
+      archive.push({ id, content: allVersions[id], time: new Date().toISOString() });
+    }
+  });
+  localStorage.setItem("signed_contract_archive", JSON.stringify(archive));
+  document.getElementById("archiveConfirm").innerText = `📦 서명 완료된 계약 ${archive.length}건 보관함에 이동됨`;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📄 계약 및 서명 대시보드 PDF 리포트 생성</h2>
+<button onclick="generateContractReportPDF()" style="padding:8px 16px;">📑 리포트 PDF 다운로드</button>
+<div id="contractPDFStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function generateContractReportPDF() {
+  const sigData = JSON.parse(localStorage.getItem("signature_status") || "{}");
+  const versionLog = JSON.parse(localStorage.getItem("contract_version_log") || "[]");
+  let text = "📋 AgriNexus 계약서 및 서명 대시보드\n\n";
+  text += `총 계약 수: ${Object.keys(sigData).length}\n서명 완료: ${Object.values(sigData).filter(v => v==='signed').length}\n\n`;
+  text += "🕘 계약 버전 이력:\n";
+  versionLog.forEach(v => text += `• ${v.version} - ${v.time}\n`);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  text.split("\n").forEach((line, i) => pdf.text(line, 10, 10 + i * 8));
+  pdf.save("AgriNexus_Contract_Summary_Report.pdf");
+  document.getElementById("contractPDFStatus").innerText = "✅ PDF 보고서 저장 완료";
+}
+</script>
+
 </body>
+
 
 
 
