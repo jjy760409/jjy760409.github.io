@@ -1807,7 +1807,79 @@ ${grouped}
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📬 Twilio SMS API 연동 예시</h2>
+<p>실제 문자 전송 API 구성 (Node.js 서버 필요)</p>
+<pre style="background:#f4f4f4;padding:10px;font-size:0.8rem;">
+const twilio = require('twilio');
+const client = new twilio('ACCOUNT_SID', 'AUTH_TOKEN');
+
+client.messages.create({
+  body: 'AgriNexus 자동 응답입니다.',
+  to: '+821012345678',
+  from: '+12015551234'
+}).then(msg => console.log(msg.sid));
+</pre>
+
+---
+
+<h2>🧾 GPT 기반 템플릿 자동 분류 및 추천</h2>
+<button onclick="analyzeTemplateCategories()" style="padding:8px 16px;">📚 템플릿 분류 및 추천</button>
+<div id="templateCategoryOutput" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function analyzeTemplateCategories() {
+  const stored = localStorage.getItem("agrinexus_reply_template") || "";
+  if (!stored) return alert("저장된 템플릿이 없습니다.");
+  document.getElementById("templateCategoryOutput").innerText = "🧠 템플릿 분석 중...";
+
+  const prompt = `
+다음 템플릿 메시지를 적절한 카테고리(문의/불만/칭찬/제안 등)로 분류하고, 유사한 추천 템플릿을 1~2개 제안해 주세요:
+
+"${stored}"
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const result = await res.json();
+  document.getElementById("templateCategoryOutput").innerText = result.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📅 예약 문자 전송 시뮬레이션</h2>
+<input type="text" id="scheduledMsg" placeholder="전송할 메시지" style="padding:8px;width:80%;" />
+<input type="number" id="delaySeconds" placeholder="몇 초 후 전송?" style="padding:8px;width:180px;" />
+<button onclick="scheduleSMS()" style="padding:8px 16px;">⏰ 예약 전송 실행</button>
+<div id="scheduledSMSResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function scheduleSMS() {
+  const msg = document.getElementById("scheduledMsg").value.trim();
+  const delay = parseInt(document.getElementById("delaySeconds").value.trim(), 10) * 1000;
+  if (!msg || isNaN(delay)) return alert("메시지와 전송시간을 정확히 입력해 주세요.");
+
+  document.getElementById("scheduledSMSResult").innerText = `⏳ ${delay / 1000}초 후 메시지 전송 예정...`;
+
+  setTimeout(() => {
+    document.getElementById("scheduledSMSResult").innerText = `✅ 메시지 전송 완료: "${msg}" (시뮬레이션)`;
+  }, delay);
+}
+</script>
+
 </body>
+
 
 
 
