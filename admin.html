@@ -5,18 +5,23 @@
   <meta charset="UTF-8">
   <title>AgriNexus Admin Dashboard</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }
     h1 { color: #198754; }
     .log { background: white; border-radius: 10px; padding: 10px; margin: 10px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .uid { font-weight: bold; color: #333; }
     .msg { margin-top: 4px; }
+    #loginBtn { padding: 10px 20px; font-weight: bold; background: #198754; color: white; border: none; border-radius: 8px; cursor: pointer; }
   </style>
 </head>
 <body>
   <h1>📊 AgriNexus 관리자 대시보드</h1>
-  <div id="logs">불러오는 중...</div>
+  <button id="loginBtn" onclick="login()">🔐 관리자 로그인 (Google)</button>
+  <div id="logs" style="margin-top:20px;"></div>
+  <canvas id="langChart" width="400" height="200"></canvas>
 
   <script>
     const firebaseConfig = {
@@ -30,26 +35,70 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    const auth = firebase.auth();
 
-    const logsDiv = document.getElementById("logs");
-    db.ref("agrinexus_chat").on("value", snapshot => {
-      logsDiv.innerHTML = "";
-      const data = snapshot.val();
-      for (let uid in data) {
-        const userLogs = data[uid];
-        for (let key in userLogs) {
-          const entry = userLogs[key];
-          const log = document.createElement("div");
-          log.className = "log";
-          log.innerHTML = `
-            <div class="uid">👤 사용자: ${uid}</div>
-            <div class="msg"><strong>${entry.sender}:</strong> ${entry.message}</div>
-            <div class="msg">🌐 언어: ${entry.lang || "N/A"}</div>
-          `;
-          logsDiv.appendChild(log);
+    function login() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          if (!user.email.endsWith("@agrinexus.com")) {
+            alert("관리자 전용 접근입니다.");
+            return;
+          }
+          document.getElementById("loginBtn").style.display = "none";
+          loadLogs();
+        }).catch((error) => {
+          console.error(error);
+          alert("로그인 실패: " + error.message);
+        });
+    }
+
+    function loadLogs() {
+      db.ref("agrinexus_chat").on("value", snapshot => {
+        const logsDiv = document.getElementById("logs");
+        logsDiv.innerHTML = "";
+        const data = snapshot.val();
+        const langStats = { en: 0, ko: 0, ja: 0 };
+        for (let uid in data) {
+          const userLogs = data[uid];
+          for (let key in userLogs) {
+            const entry = userLogs[key];
+            langStats[entry.lang] = (langStats[entry.lang] || 0) + 1;
+            const log = document.createElement("div");
+            log.className = "log";
+            log.innerHTML = `
+              <div class="uid">👤 사용자: ${uid}</div>
+              <div class="msg"><strong>${entry.sender}:</strong> ${entry.message}</div>
+              <div class="msg">🌐 언어: ${entry.lang || "N/A"}</div>
+            `;
+            logsDiv.appendChild(log);
+          }
         }
-      }
-    });
+        drawChart(langStats);
+      });
+    }
+
+    function drawChart(stats) {
+      const ctx = document.getElementById("langChart").getContext("2d");
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['English', 'Korean', 'Japanese'],
+          datasets: [{
+            label: '질문/응답 건수',
+            data: [stats.en || 0, stats.ko || 0, stats.ja || 0],
+            backgroundColor: ['#4caf50', '#2196f3', '#ff9800']
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>
