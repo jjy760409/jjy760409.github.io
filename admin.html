@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#198754">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
   <meta charset="UTF-8">
   <title>AgriNexus Admin Dashboard</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -1971,7 +1976,114 @@ async function suggestTemplateImprovements() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🌐 실시간 페이지 번역 시스템</h2>
+<select id="langSelectGPT" onchange="translatePage()" style="padding:6px;">
+  <option value="ko">🇰🇷 한국어</option>
+  <option value="en">🇺🇸 English</option>
+  <option value="ja">🇯🇵 日本語</option>
+  <option value="zh">🇨🇳 中文</option>
+</select>
+<div id="translatedContent" style="margin-top:15px;font-size:0.9rem;"></div>
+
+<script>
+async function translatePage() {
+  const lang = document.getElementById("langSelectGPT").value;
+  const content = "AgriNexus World는 전세계 스마트팜, 물류, 수출입 자동화를 위한 플랫폼입니다.";
+  const prompt = `다음 문장을 ${lang} 언어로 번역해 주세요:\n\n"${content}"`;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("translatedContent").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🧾 계약서 AI 검토 및 서명 추적</h2>
+<textarea id="contractReviewInput" placeholder="계약서 본문 입력" style="width:100%;height:100px;"></textarea>
+<button onclick="reviewContractAI()" style="padding:8px 16px;">🧠 검토 및 서명 추적</button>
+<div id="contractReviewResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function reviewContractAI() {
+  const content = document.getElementById("contractReviewInput").value.trim();
+  if (!content) return alert("계약서를 입력해 주세요.");
+  const prompt = `
+계약서 내용을 AI가 검토하고 누락된 항목이나 법적 리스크가 있는 부분을 표시해 주세요.
+또한 서명 여부 추적을 위한 문장 구조를 제안해 주세요.
+\n\n${content}
+  `;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("contractReviewResult").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📦 상품 자동 견적서 생성기</h2>
+<input type="text" id="productName" placeholder="상품명" style="padding:8px;width:300px;" />
+<input type="number" id="productQty" placeholder="수량" style="padding:8px;width:150px;" />
+<button onclick="generateProductQuote()" style="padding:8px 16px;">🧾 견적서 생성</button>
+<div id="productQuoteResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function generateProductQuote() {
+  const name = document.getElementById("productName").value.trim();
+  const qty = document.getElementById("productQty").value.trim();
+  if (!name || !qty) return alert("상품명과 수량을 입력해 주세요.");
+  const prompt = `상품명: ${name}, 수량: ${qty} 기준으로 견적서를 작성해 주세요. 세부 항목 포함해 주세요.`;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  document.getElementById("productQuoteResult").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📊 사용자 활동 리포트 자동 생성</h2>
+<button onclick="generateActivityReport()" style="padding:8px 16px;">📋 리포트 생성</button>
+<div id="activityReport" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function generateActivityReport() {
+  const crm = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const now = new Date();
+  const summary = `📊 사용자 활동 요약 (${now.toLocaleDateString()} 기준)\n총 응답 수: ${crm.length}\n최근 사용자: ${crm.slice(-1)[0]?.user || "없음"}`;
+  document.getElementById("activityReport").innerText = summary;
+}
+</script>
+
 </body>
+
 
 
 
