@@ -521,7 +521,66 @@ async function startAutoDocumentSystem() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🌍 국가별 수출입 문서 자동 안내 시스템</h2>
+<p>수출입하려는 국가를 선택하면 필요한 필수 문서와 준비사항을 실시간 안내합니다.</p>
+
+<select id="countrySelector" style="padding:8px;">
+  <option value="United States">🇺🇸 미국</option>
+  <option value="Korea">🇰🇷 대한민국</option>
+  <option value="Japan">🇯🇵 일본</option>
+  <option value="Germany">🇩🇪 독일</option>
+  <option value="China">🇨🇳 중국</option>
+</select>
+
+<input type="text" id="productInfo" placeholder="제품 또는 서비스 입력" style="padding:8px;width:300px;" />
+<button onclick="fetchCountryDocs()" style="padding:8px 16px;">📄 문서 확인</button>
+
+<div id="countryDocResults" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function fetchCountryDocs() {
+  const country = document.getElementById("countrySelector").value;
+  const product = document.getElementById("productInfo").value.trim();
+  if (!product) return alert("제품 또는 서비스를 입력해 주세요.");
+
+  document.getElementById("countryDocResults").innerText = "📦 문서 정보 로딩 중...";
+
+  const prompt = `
+"${country}"로 "${product}"를 수출/수입하려는 경우,
+필수로 준비해야 할 서류, 통관 문서, 계약서 항목, 주의사항, 제도 차이 등을 다음 항목에 따라 안내해 주세요:
+
+1. 필수 수출입 문서
+2. 계약서 필수 항목
+3. 통관 및 세관 요건
+4. 국가별 언어 번역 필요 여부
+5. 일반적으로 발생하는 오류 및 사전 준비 체크리스트
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("countryDocResults").innerText = data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("countryDocResults").innerText = "❌ 국가별 문서 정보 조회 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
