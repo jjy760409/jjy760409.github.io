@@ -2076,7 +2076,68 @@ async function generateContractWizard() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🌍 실시간 GeoIP 사용자 국가 위치 추적 (시뮬레이션)</h2>
+<button onclick="simulateGeoIP()" style="padding:8px 16px;">🌐 사용자 위치 조회</button>
+<div id="geoIPOutput" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function simulateGeoIP() {
+  document.getElementById("geoIPOutput").innerText = "📡 사용자 위치 조회 중...";
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    const country = data.country_name;
+    const ip = data.ip;
+    document.getElementById("geoIPOutput").innerText = `🌎 접속 위치: ${country} (${ip})`;
+  } catch {
+    document.getElementById("geoIPOutput").innerText = "❌ 위치 정보를 불러올 수 없습니다.";
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📤 견적/계약서 PDF 저장 및 이메일 전송 (시뮬레이션)</h2>
+<textarea id="quoteOrContractText" placeholder="저장할 내용 입력" style="width:100%;height:80px;"></textarea>
+<input type="email" id="emailTarget" placeholder="받는 이메일 주소" style="padding:8px;width:300px;" />
+<button onclick="saveAndSendDoc()" style="padding:8px 16px;">📎 PDF 저장 + 메일 발송</button>
+<div id="emailSendStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function saveAndSendDoc() {
+  const content = document.getElementById("quoteOrContractText").value;
+  const email = document.getElementById("emailTarget").value;
+  if (!content || !email) return alert("내용과 이메일을 입력해 주세요.");
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  const lines = content.split("\n");
+  lines.forEach((line, i) => pdf.text(line, 10, 10 + i * 10));
+  pdf.save("AgriNexus_Document.pdf");
+  document.getElementById("emailSendStatus").innerText = `✅ PDF 저장 완료 및 ${email}로 메일 전송됨 (시뮬레이션)`;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📊 수출입 요건 비교 PDF 보고서 저장</h2>
+<button onclick="saveExportComparePDF()" style="padding:8px 16px;">🧾 보고서 PDF 저장</button>
+<div id="exportPDFStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function saveExportComparePDF() {
+  const content = document.getElementById("compareExportResult").innerText;
+  if (!content) return alert("먼저 국가 비교를 실행해 주세요.");
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  const lines = content.split("\n");
+  lines.forEach((line, i) => pdf.text(line, 10, 10 + i * 10));
+  pdf.save("Export_Requirement_Report.pdf");
+  document.getElementById("exportPDFStatus").innerText = "✅ PDF 보고서 저장 완료";
+}
+</script>
+
 </body>
+
 
 
 
