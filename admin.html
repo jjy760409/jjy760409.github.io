@@ -2508,7 +2508,81 @@ function generateContractReportPDF() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🕵️ 계약 변경 시 이메일/SMS 알림 (시뮬레이션)</h2>
+<input type="email" id="alertEmail" placeholder="이메일 주소" style="padding:6px;width:300px;" />
+<input type="text" id="alertPhone" placeholder="휴대폰 번호" style="padding:6px;width:300px;" />
+<button onclick="sendContractChangeAlert()" style="padding:8px 16px;">📡 변경 알림 전송</button>
+<div id="changeAlertStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function sendContractChangeAlert() {
+  const email = document.getElementById("alertEmail").value.trim();
+  const phone = document.getElementById("alertPhone").value.trim();
+  if (!email && !phone) return alert("이메일 또는 전화번호를 입력해 주세요.");
+  document.getElementById("changeAlertStatus").innerText = "📬 알림 전송 중...";
+  setTimeout(() => {
+    document.getElementById("changeAlertStatus").innerText = `✅ 이메일(${email}) 및 SMS(${phone})로 알림 전송 완료 (시뮬레이션)`;
+  }, 1500);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📊 계약 흐름 상태 시각화</h2>
+<select id="flowStage" onchange="updateFlow()" style="padding:6px;">
+  <option value="start">진행 시작</option>
+  <option value="review">검토 중</option>
+  <option value="signed">서명 완료</option>
+  <option value="complete">계약 완료</option>
+</select>
+<div style="margin-top:10px;">
+  <div style="background:#ddd;width:100%;height:30px;position:relative;border-radius:5px;">
+    <div id="flowBar" style="background:#4caf50;height:30px;width:0%;text-align:center;color:#fff;line-height:30px;border-radius:5px 0 0 5px;">0%</div>
+  </div>
+</div>
+
+<script>
+function updateFlow() {
+  const stage = document.getElementById("flowStage").value;
+  const stages = { start: 25, review: 50, signed: 75, complete: 100 };
+  const percent = stages[stage];
+  const bar = document.getElementById("flowBar");
+  bar.style.width = percent + "%";
+  bar.textContent = percent + "%";
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🧠 자동 계약 템플릿 추천 시스템</h2>
+<input type="text" id="templateType" placeholder="업종 또는 계약 목적 (예: 유통 계약)" style="padding:8px;width:300px;" />
+<button onclick="recommendTemplate()" style="padding:8px 16px;">🤖 템플릿 추천</button>
+<div id="templateSuggestion" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function recommendTemplate() {
+  const type = document.getElementById("templateType").value.trim();
+  if (!type) return alert("계약 목적을 입력해 주세요.");
+  document.getElementById("templateSuggestion").innerText = "🧠 템플릿 분석 중...";
+  const prompt = `다음 업종 또는 계약 목적에 적합한 계약서 템플릿을 추천해 주세요: ${type}`;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer sk-abc123xyz456def...",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const result = await res.json();
+  document.getElementById("templateSuggestion").innerText = result.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
