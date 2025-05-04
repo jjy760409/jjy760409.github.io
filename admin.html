@@ -100,5 +100,54 @@
       });
     }
   </script>
+
+<div style="margin-top: 40px;">
+  <h2>🧠 GPT 기반 질문 카테고리 분류</h2>
+  <button onclick="categorizeQuestions()" style="padding:10px;background:#333;color:white;border:none;border-radius:6px;">AI로 질문 분류</button>
+  <div id="categoryResults" style="margin-top:20px;"></div>
+</div>
+
+<script>
+async function categorizeQuestions() {
+  const logs = document.querySelectorAll(".log .msg strong");
+  const messages = Array.from(logs).map(log => log.parentElement.textContent).slice(0, 10).join("\n");
+
+  if (!messages) {
+    alert("분석할 질문이 없습니다.");
+    return;
+  }
+
+  const prompt = `
+다음 사용자 질문을 분석하여 각 질문을 아래와 같은 카테고리 중 하나로 분류해 주세요:
+[설계, 재배, 물류, 수출입, 문서, 기타]
+형식: 질문 → 카테고리
+
+질문 목록:
+${messages}
+  `;
+
+  document.getElementById("categoryResults").innerText = "AI 분석 중...";
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("categoryResults").innerText = data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("categoryResults").innerText = "❌ 분석 실패";
+  }
+}
+</script>
 </body>
+
 </html>
