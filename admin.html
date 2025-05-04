@@ -891,7 +891,80 @@ async function runGlobalPR() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📬 글로벌 홍보 콘텐츠 이메일 전송 (시뮬레이션)</h2>
+<p>자동 생성된 콘텐츠를 전세계 물류 기업 대상 이메일로 전송합니다.</p>
+<input type="email" id="targetEmail" placeholder="받는 이메일 주소 입력" style="padding:8px;width:300px;" />
+<button onclick="sendPREmail()" style="padding:8px 16px;">✉️ 이메일 전송</button>
+<div id="emailSendStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function sendPREmail() {
+  const email = document.getElementById("targetEmail").value.trim();
+  const content = document.getElementById("globalPRResult").innerText;
+  if (!email || !content) {
+    return alert("이메일과 콘텐츠를 모두 입력 또는 생성해 주세요.");
+  }
+  document.getElementById("emailSendStatus").innerText = "📡 이메일 전송 중...";
+  setTimeout(() => {
+    document.getElementById("emailSendStatus").innerText = "✅ 이메일 전송 완료! (시뮬레이션)";
+  }, 1500);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>💾 PR 콘텐츠 저장 및 재사용</h2>
+<button onclick="savePRContent()" style="padding:8px 16px;">📂 콘텐츠 저장</button>
+<button onclick="loadPRContent()" style="padding:8px 16px;">📤 저장 콘텐츠 불러오기</button>
+<div id="storageStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function savePRContent() {
+  const content = document.getElementById("globalPRResult").innerText;
+  if (!content) return alert("저장할 콘텐츠가 없습니다.");
+  localStorage.setItem("agrinexus_pr_content", content);
+  document.getElementById("storageStatus").innerText = "✅ 콘텐츠가 저장되었습니다.";
+}
+function loadPRContent() {
+  const stored = localStorage.getItem("agrinexus_pr_content");
+  if (stored) {
+    document.getElementById("globalPRResult").innerText = stored;
+    document.getElementById("storageStatus").innerText = "📤 저장된 콘텐츠를 불러왔습니다.";
+  } else {
+    document.getElementById("storageStatus").innerText = "⚠️ 저장된 콘텐츠가 없습니다.";
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🤝 파트너십 신청서</h2>
+<p>기업 또는 기관이 파트너십 신청을 제출하면 자동 저장됩니다.</p>
+<input type="text" id="partnerName" placeholder="회사 또는 기관명" style="padding:8px;width:300px;" />
+<input type="text" id="partnerContact" placeholder="연락처 (이메일/전화)" style="padding:8px;width:300px;" />
+<textarea id="partnerMessage" placeholder="신청 내용" style="width:100%;height:80px;padding:8px;"></textarea>
+<button onclick="submitPartnership()" style="padding:8px 16px;">🤝 신청 제출</button>
+<div id="partnerStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function submitPartnership() {
+  const name = document.getElementById("partnerName").value.trim();
+  const contact = document.getElementById("partnerContact").value.trim();
+  const msg = document.getElementById("partnerMessage").value.trim();
+  if (!name || !contact || !msg) return alert("모든 항목을 입력해 주세요.");
+  const entry = { name, contact, msg, time: new Date().toISOString() };
+  const data = JSON.parse(localStorage.getItem("agrinexus_partners") || "[]");
+  data.push(entry);
+  localStorage.setItem("agrinexus_partners", JSON.stringify(data));
+  document.getElementById("partnerStatus").innerText = "✅ 신청이 저장되었습니다.";
+  document.getElementById("partnerName").value = "";
+  document.getElementById("partnerContact").value = "";
+  document.getElementById("partnerMessage").value = "";
+}
+</script>
+
 </body>
+
 
 
 
