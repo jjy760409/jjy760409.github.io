@@ -1878,7 +1878,101 @@ function scheduleSMS() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📊 템플릿 사용 통계 분석</h2>
+<button onclick="recordTemplateUse()" style="padding:8px 16px;">📈 사용 기록 추가</button>
+<canvas id="templateUsageChart" width="400" height="200" style="margin-top:20px;"></canvas>
+
+<script>
+function recordTemplateUse() {
+  const content = localStorage.getItem("agrinexus_reply_template") || "기본템플릿";
+  const map = JSON.parse(localStorage.getItem("template_usage") || "{}");
+  map[content] = (map[content] || 0) + 1;
+  localStorage.setItem("template_usage", JSON.stringify(map));
+  drawTemplateUsageChart();
+}
+
+function drawTemplateUsageChart() {
+  const map = JSON.parse(localStorage.getItem("template_usage") || "{}");
+  const labels = Object.keys(map);
+  const data = labels.map(k => map[k]);
+  const ctx = document.getElementById("templateUsageChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{ label: "템플릿 사용 횟수", data: data, backgroundColor: "#3f51b5" }]
+    },
+    options: { responsive: true, indexAxis: "y" }
+  });
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📈 예약 문자 반복 전송 시뮬레이션</h2>
+<input type="text" id="repeatMessage" placeholder="보낼 메시지" style="padding:8px;width:300px;" />
+<input type="number" id="repeatCount" placeholder="반복 횟수" style="padding:8px;width:150px;" />
+<input type="number" id="repeatDelay" placeholder="간격 (초)" style="padding:8px;width:150px;" />
+<button onclick="scheduleRepeatingSMS()" style="padding:8px 16px;">🔁 반복 전송 시작</button>
+<div id="repeatResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function scheduleRepeatingSMS() {
+  const msg = document.getElementById("repeatMessage").value.trim();
+  const count = parseInt(document.getElementById("repeatCount").value, 10);
+  const delay = parseInt(document.getElementById("repeatDelay").value, 10) * 1000;
+  if (!msg || isNaN(count) || isNaN(delay)) return alert("모든 값을 입력해 주세요.");
+
+  document.getElementById("repeatResult").innerText = `🔁 총 ${count}회 전송 예정...`;
+
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const log = document.getElementById("repeatResult").innerText;
+      document.getElementById("repeatResult").innerText = `${log}\n✅ ${i + 1}회 전송 완료: "${msg}"`;
+    }, delay * (i + 1));
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🧠 템플릿 효과 자동 최적화 가이드 (GPT)</h2>
+<button onclick="suggestTemplateImprovements()" style="padding:8px 16px;">📋 템플릿 개선 제안 받기</button>
+<div id="templateImproveOutput" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function suggestTemplateImprovements() {
+  const stored = localStorage.getItem("agrinexus_reply_template") || "";
+  if (!stored) return alert("템플릿을 먼저 저장해 주세요.");
+  document.getElementById("templateImproveOutput").innerText = "🧠 분석 중...";
+
+  const prompt = `
+다음 자동 응답 템플릿의 문장을 개선해 주세요.
+- 전달력, 명확성, 공감도를 높이기 위해 간결하고 효과적인 문장으로 제안해 주세요.
+- 200자 이내로 구성해 주세요.
+
+"${stored}"
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const result = await res.json();
+  document.getElementById("templateImproveOutput").innerText = result.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
