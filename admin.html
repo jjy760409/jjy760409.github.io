@@ -847,7 +847,52 @@ async function fetchLogisticsCost() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📣 글로벌 홍보 및 회원사/기관 알림 자동화 시스템</h2>
+<p>AgriNexus 플랫폼의 정보와 서비스를 전세계 물류 기업, 개인, 회원사, 기관에 실시간 자동 알림하고 수익을 극대화합니다.</p>
+
+<button onclick="runGlobalPR()" style="padding:10px 20px;">🌍 글로벌 홍보 실행</button>
+<div id="globalPRResult" style="margin-top:15px;font-size:0.9rem;"></div>
+
+<script>
+async function runGlobalPR() {
+  document.getElementById("globalPRResult").innerText = "📡 홍보 메시지 자동 생성 및 배포 중...";
+
+  const prompt = `
+다음 조건을 기반으로 AgriNexus World의 서비스를 글로벌 물류 기업, 개인사업자, 협회, 정부기관에게 실시간 자동 알림하는 프로그램을 설계하고,
+자동으로 콘텐츠를 생성하여 배포합니다:
+
+- 강점: AI 기반 계약서 자동화, 수출입 문서 시스템, 물류비 분석, HS 코드 추천, 통관 지원
+- 대상: 한국 및 전세계의 항공사, 선박사, 택배회사, 수출입 유통업체, 국가기관, 산업협회, 무역단체
+- 목적: 회원사 확보, 제휴사 유치, 정부기관 협력, 글로벌 신뢰도 상승
+- 수익 전략: 유료 컨설팅, API 접근 과금, 프리미엄 보고서 구독, 회원 등급제
+
+결과 콘텐츠에는 이메일 초안, 배포 대상 목록 유형, PR 콘텐츠 구조를 포함해 주세요.
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("globalPRResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    document.getElementById("globalPRResult").innerText = "❌ 글로벌 홍보 자동 생성 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
