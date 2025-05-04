@@ -714,7 +714,69 @@ function emailContract() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>✈️🚢📦 전세계 항공/선박/카고/택배 실시간 배송 정보 시스템</h2>
+<p>국가와 운송 유형을 선택하면 실시간 배송 및 물류 정보를 제공합니다.</p>
+
+<select id="logisticsCountry" style="padding:8px;">
+  <option value="United States">🇺🇸 미국</option>
+  <option value="Korea">🇰🇷 한국</option>
+  <option value="Japan">🇯🇵 일본</option>
+  <option value="Germany">🇩🇪 독일</option>
+  <option value="China">🇨🇳 중국</option>
+</select>
+
+<select id="logisticsType" style="padding:8px;">
+  <option value="air">✈️ 항공</option>
+  <option value="sea">🚢 선박</option>
+  <option value="cargo">📦 카고</option>
+  <option value="courier">📮 택배</option>
+</select>
+
+<button onclick="fetchLogisticsInfo()" style="padding:8px 16px;">🔍 배송 정보 조회</button>
+<div id="logisticsResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function fetchLogisticsInfo() {
+  const country = document.getElementById("logisticsCountry").value;
+  const type = document.getElementById("logisticsType").value;
+  document.getElementById("logisticsResult").innerText = "🚚 물류 정보 로딩 중...";
+
+  const prompt = `
+"${country}" 국가의 "${type}" 운송 방식에 대해 다음 정보를 실시간으로 제공해 주세요:
+
+1. 최근 출발 및 도착 정보 (예시 기반)
+2. 예상 배송 소요 시간
+3. 주요 허브 및 항만/공항
+4. 특이사항 또는 지연 요소
+5. 물류 운영 업체 예시 (DHL, FedEx, Maersk 등)
+
+각 항목은 명확하고 간결하게 요약해 주세요.
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("logisticsResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    document.getElementById("logisticsResult").innerText = "❌ 실시간 물류 조회 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
