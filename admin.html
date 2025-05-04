@@ -579,7 +579,110 @@ async function fetchCountryDocs() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📝 계약서 자동 완성 시스템</h2>
+<p>제품 또는 서비스와 국가를 입력하면 자동으로 맞춤형 계약서 템플릿을 생성합니다.</p>
+
+<input type="text" id="contractProduct" placeholder="제품 또는 서비스 입력" style="padding:8px;width:300px;" />
+<select id="contractCountry" style="padding:8px;">
+  <option value="United States">🇺🇸 미국</option>
+  <option value="Korea">🇰🇷 한국</option>
+  <option value="Japan">🇯🇵 일본</option>
+  <option value="Germany">🇩🇪 독일</option>
+  <option value="China">🇨🇳 중국</option>
+</select>
+<button onclick="generateContract()" style="padding:8px 16px;">📄 계약서 생성</button>
+
+<div id="contractResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function generateContract() {
+  const product = document.getElementById("contractProduct").value.trim();
+  const country = document.getElementById("contractCountry").value;
+
+  if (!product) return alert("제품 또는 서비스를 입력해 주세요.");
+
+  document.getElementById("contractResult").innerText = "📄 계약서 생성 중...";
+
+  const prompt = `
+"${country}" 국가에 "${product}"를 수출입하기 위한 국제 표준 계약서를 자동으로 작성해 주세요.
+계약서는 다음 항목을 포함해야 합니다:
+- 거래 당사자 정보
+- 품목명, 수량, 가격 조건
+- 지불 조건 및 일정
+- 인코텀즈 조건 (예: FOB, CIF)
+- 통관 및 보험 책임
+- 서명란
+내용은 공식적이고 법적 효력이 있도록 구성해 주세요.
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("contractResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("contractResult").innerText = "❌ 계약서 생성 실패";
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📦 HS 코드 (세관 코드) 추천 시스템</h2>
+<p>제품을 입력하면 수출입 시 필요한 관세분류코드(HS Code)를 자동 추천합니다.</p>
+
+<input type="text" id="hsProduct" placeholder="제품 입력 (예: LED 조명, 토마토 등)" style="padding:8px;width:300px;" />
+<button onclick="recommendHSCode()" style="padding:8px 16px;">📌 코드 추천</button>
+
+<div id="hsCodeResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function recommendHSCode() {
+  const product = document.getElementById("hsProduct").value.trim();
+  if (!product) return alert("제품을 입력해 주세요.");
+
+  document.getElementById("hsCodeResult").innerText = "🔍 HS 코드 조회 중...";
+
+  const prompt = `
+"${product}"에 해당하는 최신 국제 통일 관세분류코드(HS Code)를 알려 주세요.
+가능한 경우 6자리 코드 기준으로 제공해 주세요.
+예: 0702.00 - 토마토(신선 또는 냉장)
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("hsCodeResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("hsCodeResult").innerText = "❌ HS 코드 조회 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
