@@ -849,26 +849,61 @@ async function fetchLogisticsCost() {
 
 
 <hr style="margin:40px 0;">
-<h2>📣 글로벌 홍보 및 회원사/기관 알림 자동화 시스템</h2>
-<p>AgriNexus 플랫폼의 정보와 서비스를 전세계 물류 기업, 개인, 회원사, 기관에 실시간 자동 알림하고 수익을 극대화합니다.</p>
+<h2>🚚 고급 화물 조건 기반 물류비 최적 분석 시스템</h2>
+<p>화물의 재질, 성격, 무게, 부피, 유통 조건에 따라 최적의 물류 선택을 자동 분석합니다.</p>
 
-<button onclick="runGlobalPR()" style="padding:10px 20px;">🌍 글로벌 홍보 실행</button>
-<div id="globalPRResult" style="margin-top:15px;font-size:0.9rem;"></div>
+<select id="cargoMaterial" style="padding:8px;">
+  <option value="steel">강철</option>
+  <option value="plastic">플라스틱</option>
+  <option value="wood">목재</option>
+  <option value="liquid">액체</option>
+  <option value="perishable">신선/부패성</option>
+</select>
+
+<select id="cargoNature" style="padding:8px;">
+  <option value="hazardous">위험물</option>
+  <option value="fragile">깨지기 쉬움</option>
+  <option value="general">일반품</option>
+  <option value="refrigerated">냉장/냉동</option>
+</select>
+
+<input type="text" id="cargoWeight" placeholder="무게 (kg)" style="padding:8px;width:140px;" />
+<input type="text" id="cargoVolume" placeholder="부피 (CBM)" style="padding:8px;width:140px;" />
+<input type="text" id="cargoDuration" placeholder="희망 운송기간 (일)" style="padding:8px;width:180px;" />
+
+<button onclick="analyzeAdvancedLogistics()" style="padding:8px 16px;">🔍 고급 분석 실행</button>
+
+<div id="advancedLogisticsResult" style="margin-top:20px;font-size:0.9rem;"></div>
 
 <script>
-async function runGlobalPR() {
-  document.getElementById("globalPRResult").innerText = "📡 홍보 메시지 자동 생성 및 배포 중...";
+async function analyzeAdvancedLogistics() {
+  const material = document.getElementById("cargoMaterial").value;
+  const nature = document.getElementById("cargoNature").value;
+  const weight = document.getElementById("cargoWeight").value.trim();
+  const volume = document.getElementById("cargoVolume").value.trim();
+  const duration = document.getElementById("cargoDuration").value.trim();
+
+  if (!weight || !volume || !duration) return alert("모든 항목을 입력해 주세요.");
+
+  document.getElementById("advancedLogisticsResult").innerText = "🚛 고급 물류 분석 중...";
 
   const prompt = `
-다음 조건을 기반으로 AgriNexus World의 서비스를 글로벌 물류 기업, 개인사업자, 협회, 정부기관에게 실시간 자동 알림하는 프로그램을 설계하고,
-자동으로 콘텐츠를 생성하여 배포합니다:
+화물 정보:
+- 재질: ${material}
+- 성격: ${nature}
+- 무게: ${weight}kg
+- 부피: ${volume}CBM
+- 희망 운송 기간: ${duration}일
 
-- 강점: AI 기반 계약서 자동화, 수출입 문서 시스템, 물류비 분석, HS 코드 추천, 통관 지원
-- 대상: 한국 및 전세계의 항공사, 선박사, 택배회사, 수출입 유통업체, 국가기관, 산업협회, 무역단체
-- 목적: 회원사 확보, 제휴사 유치, 정부기관 협력, 글로벌 신뢰도 상승
-- 수익 전략: 유료 컨설팅, API 접근 과금, 프리미엄 보고서 구독, 회원 등급제
+위 정보를 기반으로 최적의 물류 운송 방법(항공, 선박, 카고, 컨테이너 등)을 선택하고,
+1. 예상 운송비
+2. 추천 운송사
+3. 유통 조건
+4. 장단점
+5. 위험 요소
+6. 최종 추천 옵션
 
-결과 콘텐츠에는 이메일 초안, 배포 대상 목록 유형, PR 콘텐츠 구조를 포함해 주세요.
+을 실시간 분석하여 안내해 주세요.
   `;
 
   try {
@@ -884,87 +919,14 @@ async function runGlobalPR() {
       })
     });
     const data = await res.json();
-    document.getElementById("globalPRResult").innerText = data.choices[0].message.content;
+    document.getElementById("advancedLogisticsResult").innerText = data.choices[0].message.content;
   } catch (e) {
-    document.getElementById("globalPRResult").innerText = "❌ 글로벌 홍보 자동 생성 실패";
+    document.getElementById("advancedLogisticsResult").innerText = "❌ 분석 실패";
   }
-}
-</script>
-
-
-<hr style="margin:40px 0;">
-<h2>📬 글로벌 홍보 콘텐츠 이메일 전송 (시뮬레이션)</h2>
-<p>자동 생성된 콘텐츠를 전세계 물류 기업 대상 이메일로 전송합니다.</p>
-<input type="email" id="targetEmail" placeholder="받는 이메일 주소 입력" style="padding:8px;width:300px;" />
-<button onclick="sendPREmail()" style="padding:8px 16px;">✉️ 이메일 전송</button>
-<div id="emailSendStatus" style="margin-top:10px;font-size:0.9rem;"></div>
-
-<script>
-function sendPREmail() {
-  const email = document.getElementById("targetEmail").value.trim();
-  const content = document.getElementById("globalPRResult").innerText;
-  if (!email || !content) {
-    return alert("이메일과 콘텐츠를 모두 입력 또는 생성해 주세요.");
-  }
-  document.getElementById("emailSendStatus").innerText = "📡 이메일 전송 중...";
-  setTimeout(() => {
-    document.getElementById("emailSendStatus").innerText = "✅ 이메일 전송 완료! (시뮬레이션)";
-  }, 1500);
-}
-</script>
-
-<hr style="margin:40px 0;">
-<h2>💾 PR 콘텐츠 저장 및 재사용</h2>
-<button onclick="savePRContent()" style="padding:8px 16px;">📂 콘텐츠 저장</button>
-<button onclick="loadPRContent()" style="padding:8px 16px;">📤 저장 콘텐츠 불러오기</button>
-<div id="storageStatus" style="margin-top:10px;font-size:0.9rem;"></div>
-
-<script>
-function savePRContent() {
-  const content = document.getElementById("globalPRResult").innerText;
-  if (!content) return alert("저장할 콘텐츠가 없습니다.");
-  localStorage.setItem("agrinexus_pr_content", content);
-  document.getElementById("storageStatus").innerText = "✅ 콘텐츠가 저장되었습니다.";
-}
-function loadPRContent() {
-  const stored = localStorage.getItem("agrinexus_pr_content");
-  if (stored) {
-    document.getElementById("globalPRResult").innerText = stored;
-    document.getElementById("storageStatus").innerText = "📤 저장된 콘텐츠를 불러왔습니다.";
-  } else {
-    document.getElementById("storageStatus").innerText = "⚠️ 저장된 콘텐츠가 없습니다.";
-  }
-}
-</script>
-
-<hr style="margin:40px 0;">
-<h2>🤝 파트너십 신청서</h2>
-<p>기업 또는 기관이 파트너십 신청을 제출하면 자동 저장됩니다.</p>
-<input type="text" id="partnerName" placeholder="회사 또는 기관명" style="padding:8px;width:300px;" />
-<input type="text" id="partnerContact" placeholder="연락처 (이메일/전화)" style="padding:8px;width:300px;" />
-<textarea id="partnerMessage" placeholder="신청 내용" style="width:100%;height:80px;padding:8px;"></textarea>
-<button onclick="submitPartnership()" style="padding:8px 16px;">🤝 신청 제출</button>
-<div id="partnerStatus" style="margin-top:10px;font-size:0.9rem;"></div>
-
-<script>
-function submitPartnership() {
-  const name = document.getElementById("partnerName").value.trim();
-  const contact = document.getElementById("partnerContact").value.trim();
-  const msg = document.getElementById("partnerMessage").value.trim();
-  if (!name || !contact || !msg) return alert("모든 항목을 입력해 주세요.");
-  const entry = { name, contact, msg, time: new Date().toISOString() };
-  const data = JSON.parse(localStorage.getItem("agrinexus_partners") || "[]");
-  data.push(entry);
-  localStorage.setItem("agrinexus_partners", JSON.stringify(data));
-  document.getElementById("partnerStatus").innerText = "✅ 신청이 저장되었습니다.";
-  document.getElementById("partnerName").value = "";
-  document.getElementById("partnerContact").value = "";
-  document.getElementById("partnerMessage").value = "";
 }
 </script>
 
 </body>
-
 
 
 
