@@ -148,6 +148,75 @@ ${messages}
   }
 }
 </script>
+
+<div style="margin-top: 30px;">
+  <button onclick="exportCSV()" style="padding:8px 16px;margin-right:10px;">📄 CSV 저장</button>
+  <button onclick="exportPDF()" style="padding:8px 16px;">🧾 PDF 저장</button>
+</div>
+
+<canvas id="categoryChart" width="400" height="200" style="margin-top:30px;"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function exportCSV() {
+  const content = document.getElementById("categoryResults").innerText;
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "category_analysis.csv";
+  a.click();
+}
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const content = document.getElementById("categoryResults").innerText;
+  const lines = content.split('\n');
+  lines.forEach((line, i) => doc.text(line, 10, 10 + i * 10));
+  doc.save("category_analysis.pdf");
+}
+
+function drawCategoryChartFromText() {
+  const text = document.getElementById("categoryResults").innerText;
+  const lines = text.split("\n");
+  const counts = {
+    설계: 0, 재배: 0, 물류: 0, 수출입: 0, 문서: 0, 기타: 0
+  };
+  lines.forEach(line => {
+    for (let key in counts) {
+      if (line.includes(key)) counts[key]++;
+    }
+  });
+
+  const ctx = document.getElementById("categoryChart").getContext("2d");
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(counts),
+      datasets: [{
+        label: '카테고리별 질문 수',
+        data: Object.values(counts),
+        backgroundColor: '#198754'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+</script>
+
+<script>
+const observeCategory = new MutationObserver(drawCategoryChartFromText);
+observeCategory.observe(document.getElementById("categoryResults"), { childList: true });
+</script>
+
 </body>
+
 
 </html>
