@@ -775,7 +775,80 @@ async function fetchLogisticsInfo() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>💰 실시간 운송비 비교 분석 + 최적 선택 추천 시스템</h2>
+<p>국가 및 운송 유형, 예상 무게/부피 입력 시 최적의 물류 선택을 자동 추천합니다.</p>
+
+<select id="costCountry" style="padding:8px;">
+  <option value="United States">🇺🇸 미국</option>
+  <option value="Korea">🇰🇷 한국</option>
+  <option value="Japan">🇯🇵 일본</option>
+  <option value="Germany">🇩🇪 독일</option>
+  <option value="China">🇨🇳 중국</option>
+</select>
+
+<select id="costType" style="padding:8px;">
+  <option value="air">✈️ 항공</option>
+  <option value="sea">🚢 선박</option>
+  <option value="cargo">📦 카고</option>
+  <option value="courier">📮 택배</option>
+</select>
+
+<input type="text" id="costWeight" placeholder="예상 무게 (kg)" style="padding:8px;width:140px;" />
+<input type="text" id="costVolume" placeholder="예상 부피 (CBM)" style="padding:8px;width:140px;" />
+
+<button onclick="fetchLogisticsCost()" style="padding:8px 16px;">📊 비용 분석</button>
+
+<div id="logisticsCostResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function fetchLogisticsCost() {
+  const country = document.getElementById("costCountry").value;
+  const type = document.getElementById("costType").value;
+  const weight = document.getElementById("costWeight").value.trim();
+  const volume = document.getElementById("costVolume").value.trim();
+
+  if (!weight || !volume) return alert("무게와 부피를 입력해 주세요.");
+
+  document.getElementById("logisticsCostResult").innerText = "💸 비용 분석 중...";
+
+  const prompt = `
+"${country}"로 "${type}" 방식의 운송을 진행할 때, 무게 ${weight}kg, 부피 ${volume}CBM 기준으로 
+다음 항목을 비교 분석해 주세요:
+
+1. 추천 운송사별 가격 예시 (DHL, FedEx, Maersk, 우체국 등)
+2. 항공 vs 선박 vs 카고 vs 택배 요금 비교
+3. 배송 시간 및 보험 포함 여부
+4. 추천 최적 운송 방식 및 이유
+5. 이용자에게 가장 효율적인 선택 안내
+
+최종 선택 가이드를 마지막에 요약해 주세요.
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("logisticsCostResult").innerText = data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("logisticsCostResult").innerText = "❌ 운송비 분석 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 
