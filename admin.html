@@ -681,7 +681,41 @@ async function recommendHSCode() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📤 계약서 PDF 다운로드 및 이메일 전송</h2>
+<p>계약서가 생성되면 아래 버튼으로 PDF 다운로드 또는 이메일 전송이 가능합니다.</p>
+<button onclick="downloadContractPDF()" style="padding:8px 16px;">🧾 PDF 다운로드</button>
+<button onclick="emailContract()" style="padding:8px 16px;">📬 이메일 전송</button>
+<div id="emailStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function downloadContractPDF() {
+  const content = document.getElementById("contractResult").innerText;
+  if (!content) return alert("먼저 계약서를 생성해 주세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const lines = content.split('\n');
+  lines.forEach((line, i) => doc.text(line, 10, 10 + i * 10));
+  doc.save("AgriNexus_Contract.pdf");
+}
+
+function emailContract() {
+  const content = document.getElementById("contractResult").innerText;
+  if (!content) return alert("먼저 계약서를 생성해 주세요.");
+
+  // Simulated email function (replace with real backend or email API)
+  document.getElementById("emailStatus").innerText = "📧 이메일 전송 중...";
+  setTimeout(() => {
+    document.getElementById("emailStatus").innerText = "✅ 이메일이 성공적으로 전송되었습니다! (시뮬레이션)";
+  }, 1500);
+}
+</script>
+
 </body>
+
 
 
 
