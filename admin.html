@@ -1624,7 +1624,110 @@ ${messages}
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📤 SendGrid 이메일 전송 통합 (실제 API 연동용)</h2>
+<p>실제 SendGrid 연동을 위해 API 키를 설정하고 아래 코드를 백엔드에 연동해 주세요:</p>
+<pre style="background:#f0f0f0;padding:10px;font-size:0.8rem;overflow-x:auto;">
+POST https://api.sendgrid.com/v3/mail/send
+Headers:
+  Authorization: Bearer YOUR_API_KEY
+  Content-Type: application/json
+
+Body:
+{
+  "personalizations": [{ "to": [{ "email": "client@example.com" }] }],
+  "from": { "email": "noreply@agrinexus.world" },
+  "subject": "AgriNexus 자동 응답",
+  "content": [{ "type": "text/plain", "value": "자동 응답 내용입니다." }]
+}
+</pre>
+
+---
+
+<h2>🔁 자동 응답 생성 + 이메일 전송 통합 워크플로우</h2>
+<textarea id="workflowInput" placeholder="고객 피드백 입력" style="width:100%;height:80px;padding:8px;"></textarea>
+<input type="email" id="workflowEmail" placeholder="받는 이메일 주소" style="padding:8px;width:300px;" />
+<button onclick="runAutoReplyWorkflow()" style="padding:8px 16px;">🤖 자동 응답 + 메일 전송</button>
+<div id="workflowResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function runAutoReplyWorkflow() {
+  const feedback = document.getElementById("workflowInput").value.trim();
+  const email = document.getElementById("workflowEmail").value.trim();
+  if (!feedback || !email) return alert("피드백과 이메일을 모두 입력해 주세요.");
+
+  document.getElementById("workflowResult").innerText = "🧠 응답 생성 중...";
+
+  const prompt = `
+다음 고객 메시지에 대해 200자 이내로 정확하고 친절한 자동 응답을 생성하세요:
+"${feedback}"
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const data = await res.json();
+  const reply = data.choices[0].message.content;
+
+  // Simulated email send
+  document.getElementById("workflowResult").innerText = `✅ 자동 응답 생성 완료:\n${reply}\n📬 이메일 전송 중 (시뮬레이션)...`;
+  setTimeout(() => {
+    document.getElementById("workflowResult").innerText += `\n✅ ${email} 으로 전송 완료!`;
+  }, 1500);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🧠 클러스터별 대응 가이드 자동 생성</h2>
+<button onclick="generateResponseGuides()" style="padding:8px 16px;">📚 가이드 생성</button>
+<div id="clusterGuideResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function generateResponseGuides() {
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const messages = data.slice(-12).map(d => `- ${d.msg}`).join("\n");
+  if (!messages) return alert("분석할 응답이 없습니다.");
+
+  document.getElementById("clusterGuideResult").innerText = "📖 가이드 생성 중...";
+
+  const prompt = `
+다음 고객 피드백들을 3~5개의 클러스터로 나눈 뒤, 각 클러스터별로 추천 대응 메시지를 작성해 주세요.
+- 클러스터 이름
+- 대표 키워드
+- 추천 응답 템플릿 (150자 이내)
+
+${messages}
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const result = await res.json();
+  document.getElementById("clusterGuideResult").innerText = result.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
