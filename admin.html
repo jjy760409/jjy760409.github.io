@@ -1532,7 +1532,100 @@ async function generateAutoReply() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📬 자동 응답 이메일 전송 (시뮬레이션)</h2>
+<input type="email" id="replyEmail" placeholder="고객 이메일" style="padding:8px;width:300px;" />
+<button onclick="simulateReplySend()" style="padding:8px 16px;">📤 자동 응답 메일 전송</button>
+<div id="emailReplyStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function simulateReplySend() {
+  const email = document.getElementById("replyEmail").value.trim();
+  if (!email) return alert("이메일 주소를 입력해 주세요.");
+  document.getElementById("emailReplyStatus").innerText = "📡 메일 전송 중...";
+  setTimeout(() => {
+    document.getElementById("emailReplyStatus").innerText = `✅ ${email} 으로 응답 전송 완료! (시뮬레이션)`;
+  }, 1200);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📈 감성 변화 추적 차트</h2>
+<canvas id="sentimentTrendChart" width="400" height="200" style="margin-top:10px;"></canvas>
+<button onclick="drawSentimentTrend()" style="padding:8px 16px;">📊 감성 변화 보기</button>
+
+<script>
+function drawSentimentTrend() {
+  const rawData = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const sample = rawData.slice(-12).map(d => d.msg);
+
+  const sentimentValues = sample.map(msg => {
+    if (msg.includes("감사") || msg.includes("좋아요")) return 2;
+    if (msg.includes("불편") || msg.includes("늦음") || msg.includes("불만")) return 0;
+    return 1;
+  });
+
+  const ctx = document.getElementById("sentimentTrendChart").getContext("2d");
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: sentimentValues.map((_, i) => `응답${i+1}`),
+      datasets: [{
+        label: '감성 추이 (0:부정, 1:중립, 2:긍정)',
+        data: sentimentValues,
+        borderColor: '#2196F3',
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { min: 0, max: 2, ticks: { stepSize: 1 } }
+      }
+    }
+  });
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🔍 유사 피드백 클러스터링 (GPT 기반)</h2>
+<button onclick="clusterSimilarFeedback()" style="padding:8px 16px;">🧠 클러스터 분석 실행</button>
+<div id="feedbackClusters" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function clusterSimilarFeedback() {
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const messages = data.slice(-12).map(d => `- ${d.msg}`).join("\n");
+  if (!messages) return alert("분석할 응답이 없습니다.");
+  document.getElementById("feedbackClusters").innerText = "🔎 클러스터 분석 중...";
+
+  const prompt = `
+다음 고객 피드백들을 유사한 유형끼리 3~5개의 클러스터로 묶어주세요.
+각 그룹은 공통 주제 또는 감정이 있어야 하며, 대표 키워드와 함께 묶어주세요:
+
+${messages}
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const result = await res.json();
+  document.getElementById("feedbackClusters").innerText = result.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
