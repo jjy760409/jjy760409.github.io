@@ -342,7 +342,69 @@ function showTopQuestions() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+
+<h2>🧪 GPT 분류 정확도 피드백</h2>
+<p>아래 버튼을 눌러 GPT 분류 결과에 대한 정확도를 1~5점으로 평가해 주세요.</p>
+<div id="feedbackRating">
+  <button onclick="submitFeedback(1)">⭐</button>
+  <button onclick="submitFeedback(2)">⭐⭐</button>
+  <button onclick="submitFeedback(3)">⭐⭐⭐</button>
+  <button onclick="submitFeedback(4)">⭐⭐⭐⭐</button>
+  <button onclick="submitFeedback(5)">⭐⭐⭐⭐⭐</button>
+</div>
+<div id="feedbackStatus" style="margin-top:10px;color:green;"></div>
+
+<script>
+function submitFeedback(score) {
+  const uid = "admin-feedback";
+  const time = Date.now();
+  const feedback = {
+    score,
+    timestamp: time
+  };
+  firebase.database().ref("agrinexus_feedback/" + uid + "/" + time).set(feedback);
+  document.getElementById("feedbackStatus").innerText = `감사합니다. (${score}점 제출됨)`;
+}
+</script>
+
+<hr style="margin:40px 0;">
+
+<h2>🔄 Google Sheets 연동</h2>
+<p>분석 결과 또는 질문 로그를 Google Sheets로 내보내고 싶으신가요?</p>
+<button onclick="exportToSheets()" style="padding:8px 16px;">📤 시트로 내보내기</button>
+<div id="sheetExportStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function exportToSheets() {
+  document.getElementById("sheetExportStatus").innerText = "🔄 Google Sheets로 내보내는 중...";
+  try {
+    // 아래 요청은 실제 연동 시 서버리스 Firebase Functions 또는 AppScript API 필요
+    // 여기서는 데모 URL로 대체
+    const response = await fetch("https://sheet.googleapis.com/v4/spreadsheets/fake-export-endpoint", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer FAKE_API_KEY"
+      },
+      body: JSON.stringify({
+        values: document.getElementById("categoryResults").innerText.split("\n")
+      })
+    });
+    if (response.ok) {
+      document.getElementById("sheetExportStatus").innerText = "✅ Google Sheets로 성공적으로 내보내졌습니다.";
+    } else {
+      throw new Error("내보내기 실패");
+    }
+  } catch (e) {
+    document.getElementById("sheetExportStatus").innerText = "❌ Google Sheets 연동에 실패했습니다. (API 설정 필요)";
+  }
+}
+</script>
+
 </body>
+
 
 
 
