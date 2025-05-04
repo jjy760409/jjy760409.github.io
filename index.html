@@ -2,33 +2,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AgriNexus World - Global Smart Farming Platform</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgriNexus World - Global Smart Farm Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: #eef2f1;
+            color: #1c1c1c;
+        }
+        header {
+            background: linear-gradient(90deg, #0f5132, #198754);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        header p {
+            margin-top: 10px;
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .lang-switcher button {
+            background: white;
+            border: none;
+            padding: 6px 12px;
+            margin-left: 6px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        main {
+            padding: 50px 20px;
+            max-width: 1080px;
+            margin: auto;
+        }
+        section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        section:hover {
+            transform: translateY(-4px);
+        }
+        section h2 {
+            color: #198754;
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #0f5132;
+            color: white;
+            font-size: 0.9rem;
+        }
+        #chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #198754;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .dashboard {
+            padding: 20px;
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 12px;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            main {
+                padding: 30px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to AgriNexus World</h1>
-        <p>Empowering Smart Farming Globally with AI + Automation</p>
+        <div class="lang-switcher">
+            <button onclick="alert('Switching to English')">EN</button>
+            <button onclick="alert('한국어로 전환합니다')">KR</button>
+            <button onclick="alert('日本語に切り替え')">JP</button>
+        </div>
+        <h1>AgriNexus World</h1>
+        <p>The Ultimate Smart Farm Automation & Global Logistics Solution</p>
     </header>
     <main>
-        <section id="services">
-            <h2>Our Smart Services</h2>
+        <section>
+            <h2>Real-Time Smart Farm Design & Automation</h2>
             <ul>
-                <li>Real-Time Smart Farm Design & Deployment</li>
-                <li>IoT Sensor Integration & Data Dashboard</li>
-                <li>Global Export & Import Logistics Automation</li>
-                <li>AI-Based Government Policy Matching</li>
-                <li>Multilingual Customer Support System</li>
+                <li>Global AI-based smart farm customization</li>
+                <li>IoT sensor integration and live data monitoring</li>
+                <li>Fully automated installation blueprint generation</li>
             </ul>
         </section>
-        <section id="updates">
-            <h2>Live Updates & Policy Sync</h2>
-            <p>Stay up-to-date with smart farm regulations, weather-based planning, and automated business recommendations.</p>
+        <section>
+            <h2>Global Logistics & Export System</h2>
+            <ul>
+                <li>Smart matching of freight forwarders and exporters</li>
+                <li>Live tracking via satellite for air/sea/land cargo</li>
+                <li>Real-time trade route optimization engine</li>
+            </ul>
+        </section>
+        <section>
+            <h2>One-Stop Export/Import Documentation System</h2>
+            <ul>
+                <li>Auto-generated HS codes and customs forms</li>
+                <li>Real-time risk alerts via Food Security Index</li>
+                <li>Multilingual contract/document creator with AI verification</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Smart Distribution & Market Insights</h2>
+            <ul>
+                <li>AI-analyzed crop demand/supply forecasting</li>
+                <li>Global trade intelligence system (real-time)</li>
+                <li>Smart farm profitability optimization tools</li>
+            </ul>
+        </section>
+        <section class="dashboard">
+            <h2>📊 Real-Time Dashboard</h2>
+            <p><strong>Today's Revenue:</strong> $1,280</p>
+            <p><strong>Smart Farms Active:</strong> 36</p>
+            <p><strong>Pending Shipments:</strong> 12</p>
         </section>
     </main>
     <footer>
         <p>&copy; 2025 AgriNexus World. All rights reserved.</p>
     </footer>
+    <button id="chatbot" onclick="alert('Chatbot service coming soon! 🤖')">💬 AI Chat</button>
 </body>
 </html>
