@@ -1329,7 +1329,50 @@ function sendMonthlyReport() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📊 사용자 응답 통계 대시보드</h2>
+<button onclick="renderCRMChart()" style="padding:8px 16px;">📈 통계 차트 보기</button>
+<canvas id="crmChart" width="400" height="200" style="margin-top:20px;"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function renderCRMChart() {
+  const rawData = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const dateMap = {};
+  rawData.forEach(entry => {
+    const d = new Date(entry.time);
+    const label = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`;
+    dateMap[label] = (dateMap[label] || 0) + 1;
+  });
+
+  const labels = Object.keys(dateMap).sort();
+  const values = labels.map(label => dateMap[label]);
+
+  const ctx = document.getElementById('crmChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '월별 CRM 응답 수',
+        data: values,
+        backgroundColor: '#4CAF50'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+</script>
+
 </body>
+
 
 
 
