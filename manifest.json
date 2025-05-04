@@ -2,20 +2,20 @@
 {
   "name": "AgriNexus World",
   "short_name": "AgriNexus",
-  "start_url": "/index.html",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#198754",
+  "background_color": "#ffffff",
   "theme_color": "#198754",
   "icons": [
     {
       "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
       "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
