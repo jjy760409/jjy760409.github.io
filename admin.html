@@ -216,7 +216,60 @@ const observeCategory = new MutationObserver(drawCategoryChartFromText);
 observeCategory.observe(document.getElementById("categoryResults"), { childList: true });
 </script>
 
+
+<div style="margin-top: 40px;">
+  <h2>🔎 유사 질문 추천</h2>
+  <input type="text" id="similarInput" placeholder="비교할 질문을 입력하세요" style="width:80%;padding:8px;">
+  <button onclick="recommendSimilar()" style="padding:8px 16px;">추천 보기</button>
+  <div id="similarResults" style="margin-top:15px;font-size:0.9rem;"></div>
+</div>
+
+<script>
+async function recommendSimilar() {
+  const query = document.getElementById("similarInput").value.trim();
+  if (!query) return alert("비교할 질문을 입력해 주세요.");
+
+  const allLogs = Array.from(document.querySelectorAll(".log .msg strong"))
+    .map(log => log.parentElement.textContent)
+    .filter(q => !q.includes("AgriBot"))
+    .slice(0, 20).join("\n");
+
+  const prompt = `
+아래에 기존 질문들이 있습니다. 이 중에서 입력된 질문과 가장 유사한 질문 3개를 찾아 추천해 주세요.
+
+입력 질문:
+"${query}"
+
+기존 질문들:
+${allLogs}
+`;
+
+  document.getElementById("similarResults").innerText = "🔄 유사 질문 분석 중...";
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById("similarResults").innerText = "✅ 추천:
+" + data.choices[0].message.content;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("similarResults").innerText = "❌ 추천 실패";
+  }
+}
+</script>
+
 </body>
+
 
 
 </html>
