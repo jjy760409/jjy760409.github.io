@@ -2289,7 +2289,80 @@ async function suggestGeoPricing() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🗂 계약서 버전 간 차이 비교 (Diff)</h2>
+<select id="diffA" style="padding:6px;"></select>
+<select id="diffB" style="padding:6px;margin-left:10px;"></select>
+<button onclick="compareVersions()" style="padding:8px 16px;">📑 버전 비교</button>
+<pre id="diffResult" style="background:#f9f9f9;padding:10px;margin-top:10px;font-size:0.85rem;"></pre>
+
+<script>
+function populateDiffVersions() {
+  const data = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const keys = Object.keys(data);
+  ["diffA", "diffB"].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = "";
+    keys.forEach(k => {
+      const opt = document.createElement("option");
+      opt.value = k;
+      opt.textContent = k;
+      sel.appendChild(opt);
+    });
+  });
+}
+function compareVersions() {
+  const a = document.getElementById("diffA").value;
+  const b = document.getElementById("diffB").value;
+  const versions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const linesA = versions[a]?.split("\n") || [];
+  const linesB = versions[b]?.split("\n") || [];
+  let diff = "";
+  const len = Math.max(linesA.length, linesB.length);
+  for (let i = 0; i < len; i++) {
+    if (linesA[i] !== linesB[i]) {
+      diff += `🔸 ${a}: ${linesA[i] || ""}\n🔹 ${b}: ${linesB[i] || ""}\n\n`;
+    }
+  }
+  document.getElementById("diffResult").innerText = diff || "✅ 두 버전은 동일합니다.";
+}
+window.onload = populateDiffVersions;
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📤 PDF 이메일 알림 (시뮬레이션)</h2>
+<input type="email" id="notifyEmail" placeholder="받는 이메일 주소" style="padding:8px;width:300px;" />
+<button onclick="simulateEmailSend()" style="padding:8px 16px;">📬 이메일 알림 전송</button>
+<div id="notifyStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function simulateEmailSend() {
+  const email = document.getElementById("notifyEmail").value.trim();
+  if (!email) return alert("이메일을 입력해 주세요.");
+  document.getElementById("notifyStatus").innerText = `📡 이메일 전송 중...`;
+  setTimeout(() => {
+    document.getElementById("notifyStatus").innerText = `✅ ${email} 으로 PDF 이메일 알림 발송 완료 (시뮬레이션)`;
+  }, 1200);
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📆 계약 버전 변경 타임라인</h2>
+<button onclick="showVersionTimeline()" style="padding:8px 16px;">🕘 타임라인 보기</button>
+<div id="timelineOutput" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function showVersionTimeline() {
+  const logs = JSON.parse(localStorage.getItem("contract_version_log") || "[]");
+  if (!logs.length) return document.getElementById("timelineOutput").innerText = "🕘 이력이 없습니다.";
+  const lines = logs.map(log => `📍 [${log.time}] → 버전 ${log.version}`).join("\n");
+  document.getElementById("timelineOutput").innerText = lines;
+}
+</script>
+
 </body>
+
 
 
 
