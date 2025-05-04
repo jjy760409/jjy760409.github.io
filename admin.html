@@ -1153,7 +1153,127 @@ ${doc}
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📄 문서 자동 요약 및 PDF 보고서 생성</h2>
+<button onclick="summarizeAndExportPDF()" style="padding:8px 16px;">🧾 요약 + PDF 생성</button>
+<div id="summaryPDFStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function summarizeAndExportPDF() {
+  const doc = document.getElementById("documentText").value.trim();
+  if (!doc) return alert("문서 내용을 먼저 입력해 주세요.");
+  document.getElementById("summaryPDFStatus").innerText = "📄 요약 및 PDF 생성 중...";
+
+  const prompt = `
+다음 문서를 요약하고 핵심 내용을 정리하여 PDF 보고서 형태로 정리해 주세요:
+${doc}
+  `;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const summary = data.choices[0].message.content;
+
+    const { jsPDF } = window.jspdf;
+    const docPDF = new jsPDF();
+    const lines = summary.split("\n");
+    lines.forEach((line, i) => docPDF.text(line, 10, 10 + i * 10));
+    docPDF.save("AgriNexus_Report_Summary.pdf");
+
+    document.getElementById("summaryPDFStatus").innerText = "✅ PDF 생성 완료!";
+  } catch (e) {
+    console.error(e);
+    document.getElementById("summaryPDFStatus").innerText = "❌ PDF 생성 실패";
+  }
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🌐 국가별 수출입 법령 변화 실시간 감지</h2>
+<button onclick="checkLegalChanges()" style="padding:8px 16px;">🧠 최신 법령 분석</button>
+<div id="legalChangeResult" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function checkLegalChanges() {
+  document.getElementById("legalChangeResult").innerText = "🔍 최신 법률 정보 분석 중...";
+  const prompt = `
+한국, 미국, EU, 중국, 일본의 최근 수출입 법령 및 통관 제도 변경사항을 요약 정리해 주세요.
+특히 중소기업, 스타트업, 신생 사업자에게 영향이 있는 내용을 강조해 주세요.
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("legalChangeResult").innerText = data.choices[0].message.content;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>⚖️ 수출입 분쟁 대응 시뮬레이터</h2>
+<textarea id="disputeInput" placeholder="분쟁 상황 또는 조항 입력 (예: 운송 지연 관련 조항)" style="width:100%;height:80px;padding:8px;"></textarea>
+<button onclick="simulateDisputeResolution()" style="padding:8px 16px;">🤖 대응 시뮬레이션 실행</button>
+<div id="disputeResult" style="margin-top:20px;font-size:0.9rem;"></div>
+
+<script>
+async function simulateDisputeResolution() {
+  const scenario = document.getElementById("disputeInput").value.trim();
+  if (!scenario) return alert("분쟁 상황을 입력해 주세요.");
+  document.getElementById("disputeResult").innerText = "🧠 분쟁 해결 시뮬레이션 중...";
+
+  const prompt = `
+다음 분쟁 또는 계약 조항에 대해 현실적인 대응 전략을 제안해 주세요.
+국제무역 분쟁 전문가 입장에서,
+- 관련 법령
+- 피해 최소화 전략
+- 법률적 절차
+- 중재/소송 여부
+- 소기업 또는 개인이 선택 가능한 최적 대응안을 포함해 주세요.
+
+내용:
+${scenario}
+  `;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-abc123xyz456def..."
+      },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("disputeResult").innerText = data.choices[0].message.content;
+}
+</script>
+
 </body>
+
 
 
 
