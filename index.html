@@ -122,6 +122,40 @@
   const db = firebase.database();
 </script>
 
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDemoKey00000000000000000000000000",
+    authDomain: "agrinexus-demo.firebaseapp.com",
+    databaseURL: "https://agrinexus-demo-default-rtdb.firebaseio.com",
+    projectId: "agrinexus-demo",
+    storageBucket: "agrinexus-demo.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "1:000000000000:web:demoapp"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const auth = firebase.auth();
+
+  function loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then((result) => {
+      const user = result.user;
+      alert("👤 Logged in as: " + user.displayName);
+    }).catch((error) => {
+      console.error(error);
+      alert("Login error: " + error.message);
+    });
+  }
+
+  function getCurrentUserId() {
+    return auth.currentUser ? auth.currentUser.uid : "guest";
+  }
+</script>
+
 </head>
 <body>
     <header>
@@ -177,7 +211,8 @@
         <p>&copy; 2025 AgriNexus World. All rights reserved.</p>
     </footer>
     
-<div id="chatbox" style="display:none;position:fixed;bottom:90px;right:20px;width:300px;height:400px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:999;">
+<div id="chatbox">
+<button onclick="loginWithGoogle()" style="width:100%;padding:8px;background:#f4f4f4;border:none;">🔐 Login with Google</button> style="display:none;position:fixed;bottom:90px;right:20px;width:300px;height:400px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:999;">
   <div style="background:#198754;color:#fff;padding:10px;font-weight:bold;">AgriBot 🤖</div>
   <div id="chatlog" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;display:flex;flex-direction:column;gap:10px;" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;"></div>
   <div style="display:flex;border-top:1px solid #ccc;">
@@ -250,7 +285,10 @@ function loadChatLog() {
 
 window.onload = loadChatLog;
 
+
 async function sendMessage() {
+  const uid = getCurrentUserId();
+
   const input = document.getElementById("userInput");
   const chatlog = document.getElementById("chatlog");
   
@@ -261,7 +299,22 @@ async function sendMessage() {
   if (!userText) return;
 
   
+  
   addBubble(userText, 'user');
+  db.ref('agrinexus_chat/' + uid).push({ sender: 'user', message: userText, lang });
+
+  // Loading indicator
+  const loadingBubble = document.createElement("div");
+  loadingBubble.className = "loading";
+  loadingBubble.innerText = "AgriBot is typing...";
+  loadingBubble.style.fontStyle = "italic";
+  loadingBubble.style.background = "#f1f1f1";
+  loadingBubble.style.padding = "10px";
+  loadingBubble.style.borderRadius = "10px";
+  loadingBubble.style.marginTop = "5px";
+  loadingBubble.style.alignSelf = "flex-start";
+  document.getElementById("chatlog").appendChild(loadingBubble);
+
   db.ref('agrinexus_chat').push({ sender: 'user', message: userText, lang });
 
   input.value = "";
@@ -280,8 +333,11 @@ async function sendMessage() {
   const data = await response.json();
   const botReply = data.choices[0].message.content;
   
+  
+  document.querySelector("#chatlog .loading")?.remove();
   addBubble(botReply, 'bot');
-  db.ref('agrinexus_chat').push({ sender: 'bot', message: botReply, lang });
+
+  db.ref('agrinexus_chat/' + uid).push({ sender: 'bot', message: botReply, lang });
   saveChatLog();
 
   chatlog.scrollTop = chatlog.scrollHeight;
