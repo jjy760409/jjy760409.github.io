@@ -2361,7 +2361,95 @@ function showVersionTimeline() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🔁 계약 버전 롤백 기능</h2>
+<select id="rollbackSelect" style="padding:6px;"></select>
+<button onclick="rollbackVersion()" style="padding:8px 16px;">⏪ 해당 버전으로 복원</button>
+<div id="rollbackStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function rollbackVersion() {
+  const ver = document.getElementById("rollbackSelect").value;
+  const versions = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const content = versions[ver];
+  if (content) {
+    document.getElementById("contractVersionContent").value = content;
+    document.getElementById("rollbackStatus").innerText = `✅ ${ver} 버전으로 복원되었습니다.`;
+  }
+}
+window.onload = function () {
+  const data = JSON.parse(localStorage.getItem("contract_versions") || "{}");
+  const sel = document.getElementById("rollbackSelect");
+  sel.innerHTML = "";
+  Object.keys(data).forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    sel.appendChild(opt);
+  });
+};
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📈 계약 버전 변경 통계 시각화</h2>
+<canvas id="versionStatChart" width="400" height="200" style="margin-top:10px;"></canvas>
+<button onclick="drawVersionStatChart()" style="padding:8px 16px;">📊 통계 차트 보기</button>
+
+<script>
+function drawVersionStatChart() {
+  const log = JSON.parse(localStorage.getItem("contract_version_log") || "[]");
+  const map = {};
+  log.forEach(l => {
+    const date = l.time.split("T")[0];
+    map[date] = (map[date] || 0) + 1;
+  });
+  const labels = Object.keys(map);
+  const data = labels.map(k => map[k]);
+  const ctx = document.getElementById("versionStatChart").getContext("2d");
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{ label: '일별 계약 저장 수', data: data, borderColor: '#3f51b5', tension: 0.3 }]
+    },
+    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+  });
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🔐 계약 서명 완료율 추적</h2>
+<input type="text" id="sigContractId" placeholder="계약 ID" style="padding:8px;" />
+<select id="sigStatus" style="padding:6px;">
+  <option value="signed">서명 완료</option>
+  <option value="pending">서명 대기</option>
+</select>
+<button onclick="trackSignature()" style="padding:8px 16px;">📥 상태 저장</button>
+<div id="signatureDashboard" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function trackSignature() {
+  const id = document.getElementById("sigContractId").value.trim();
+  const status = document.getElementById("sigStatus").value;
+  if (!id) return alert("계약 ID를 입력해 주세요.");
+  const data = JSON.parse(localStorage.getItem("signature_status") || "{}");
+  data[id] = status;
+  localStorage.setItem("signature_status", JSON.stringify(data));
+  updateSignatureDashboard();
+}
+function updateSignatureDashboard() {
+  const data = JSON.parse(localStorage.getItem("signature_status") || "{}");
+  const total = Object.keys(data).length;
+  const signed = Object.values(data).filter(v => v === "signed").length;
+  const percent = total ? Math.round((signed / total) * 100) : 0;
+  document.getElementById("signatureDashboard").innerText = `📃 계약 수: ${total}개, 서명 완료: ${signed}개 (${percent}%)`;
+}
+window.onload = updateSignatureDashboard;
+</script>
+
 </body>
+
 
 
 
