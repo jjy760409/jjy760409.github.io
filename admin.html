@@ -1371,7 +1371,72 @@ function renderCRMChart() {
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>📁 통계 차트 PDF 저장</h2>
+<button onclick="downloadChartAsPDF()" style="padding:8px 16px;">🧾 PDF로 저장</button>
+<div id="chartPDFStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+async function downloadChartAsPDF() {
+  const canvas = document.getElementById("crmChart");
+  const imageData = canvas.toDataURL("image/png");
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  pdf.addImage(imageData, 'PNG', 10, 10, 180, 100);
+  pdf.save("AgriNexus_CRM_Chart.pdf");
+  document.getElementById("chartPDFStatus").innerText = "✅ PDF 저장 완료";
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🔐 사용자별 CRM 응답 열람</h2>
+<button onclick="showUserResponses()" style="padding:8px 16px;">📋 사용자별 보기</button>
+<div id="userResponses" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function showUserResponses() {
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const map = {};
+  data.forEach(e => {
+    if (!map[e.user]) map[e.user] = [];
+    map[e.user].push(e.msg);
+  });
+  let output = "";
+  Object.keys(map).forEach(user => {
+    output += `📧 ${user}\n`;
+    map[user].forEach(msg => output += ` - ${msg}\n`);
+  });
+  document.getElementById("userResponses").innerText = output || "⚠️ 저장된 응답이 없습니다.";
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📊 일간/주간/월간 비교 분석</h2>
+<select id="timeFilter" onchange="filterByTimeRange()" style="padding:6px;">
+  <option value="day">최근 1일</option>
+  <option value="week">최근 7일</option>
+  <option value="month">최근 30일</option>
+</select>
+<div id="timeRangeStats" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function filterByTimeRange() {
+  const range = document.getElementById("timeFilter").value;
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const now = Date.now();
+  let cutoff = now;
+  if (range === "day") cutoff -= 1 * 24 * 60 * 60 * 1000;
+  if (range === "week") cutoff -= 7 * 24 * 60 * 60 * 1000;
+  if (range === "month") cutoff -= 30 * 24 * 60 * 60 * 1000;
+
+  const filtered = data.filter(e => new Date(e.time).getTime() > cutoff);
+  document.getElementById("timeRangeStats").innerText = `📆 ${range.toUpperCase()} 기준 응답 수: ${filtered.length}`;
+}
+</script>
+
 </body>
+
 
 
 
