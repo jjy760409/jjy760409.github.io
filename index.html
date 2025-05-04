@@ -161,9 +161,9 @@
     
 <div id="chatbox" style="display:none;position:fixed;bottom:90px;right:20px;width:300px;height:400px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:999;">
   <div style="background:#198754;color:#fff;padding:10px;font-weight:bold;">AgriBot 🤖</div>
-  <div id="chatlog" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;"></div>
+  <div id="chatlog" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;display:flex;flex-direction:column;gap:10px;" style="height:300px;padding:10px;overflow-y:auto;font-size:0.9rem;"></div>
   <div style="display:flex;border-top:1px solid #ccc;">
-    <input id="userInput" type="text" placeholder="Ask me..." style="flex:1;padding:8px;border:none;outline:none;">
+    <input id="userInput" placeholder="Type your message..." type="text" placeholder="Ask me..." style="flex:1;padding:8px;border:none;outline:none;">
     <button onclick="sendMessage()" style="background:#198754;color:white;border:none;padding:8px 12px;">Send</button>
   </div>
 </div>
@@ -191,14 +191,54 @@ document.getElementById('chatbox').style.display =
     }
     ">💬 AI Chat</button>
 
+
 <script>
+const langSelect = document.createElement("select");
+langSelect.innerHTML = `
+  <option value="en">English</option>
+  <option value="ko">Korean</option>
+  <option value="ja">Japanese</option>
+`;
+langSelect.style.position = "absolute";
+langSelect.style.bottom = "400px";
+langSelect.style.right = "20px";
+langSelect.style.padding = "6px";
+langSelect.style.borderRadius = "8px";
+langSelect.style.border = "1px solid #ccc";
+langSelect.id = "langSelect";
+document.body.appendChild(langSelect);
+
+function addBubble(content, sender = "bot") {
+  const bubble = document.createElement("div");
+  bubble.style.maxWidth = "80%";
+  bubble.style.padding = "10px";
+  bubble.style.borderRadius = "10px";
+  bubble.style.lineHeight = "1.4";
+  bubble.style.whiteSpace = "pre-wrap";
+  bubble.style.alignSelf = sender === "user" ? "flex-end" : "flex-start";
+  bubble.style.background = sender === "user" ? "#d1e7dd" : "#f8f9fa";
+  bubble.innerText = content;
+  document.getElementById("chatlog").appendChild(bubble);
+}
+
+function saveChatLog() {
+  localStorage.setItem("agrinexus-chat", document.getElementById("chatlog").innerHTML);
+}
+
+function loadChatLog() {
+  const saved = localStorage.getItem("agrinexus-chat");
+  if (saved) document.getElementById("chatlog").innerHTML = saved;
+}
+
+window.onload = loadChatLog;
+
 async function sendMessage() {
   const input = document.getElementById("userInput");
   const chatlog = document.getElementById("chatlog");
   const userText = input.value.trim();
   if (!userText) return;
 
-  chatlog.innerHTML += "<div><strong>You:</strong> " + userText + "</div>";
+  addBubble(userText, 'user');
   input.value = "";
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -214,7 +254,7 @@ async function sendMessage() {
   });
   const data = await response.json();
   const botReply = data.choices[0].message.content;
-  chatlog.innerHTML += "<div style='margin-top:5px;'><strong>AgriBot:</strong> " + botReply + "</div>";
+  addBubble(botReply, 'bot'); saveChatLog();
   chatlog.scrollTop = chatlog.scrollHeight;
 }
 </script>
