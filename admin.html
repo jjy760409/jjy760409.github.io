@@ -1272,7 +1272,65 @@ ${scenario}
 }
 </script>
 
+
+<hr style="margin:40px 0;">
+<h2>🧠 사용자 맞춤형 대응 시스템 (CRM 응답 저장)</h2>
+<input type="text" id="crmUser" placeholder="사용자 이메일 또는 이름" style="padding:8px;width:300px;" />
+<textarea id="crmFeedback" placeholder="사용자의 문의 또는 응답 내용" style="width:100%;height:80px;padding:8px;"></textarea>
+<button onclick="saveCRMResponse()" style="padding:8px 16px;">💾 CRM 응답 저장</button>
+<div id="crmStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function saveCRMResponse() {
+  const user = document.getElementById("crmUser").value.trim();
+  const msg = document.getElementById("crmFeedback").value.trim();
+  if (!user || !msg) return alert("사용자 정보와 메시지를 입력해 주세요.");
+  const entry = { user, msg, time: new Date().toISOString() };
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  data.push(entry);
+  localStorage.setItem("agrinexus_crm", JSON.stringify(data));
+  document.getElementById("crmStatus").innerText = "✅ CRM 응답 저장 완료!";
+  document.getElementById("crmUser").value = "";
+  document.getElementById("crmFeedback").value = "";
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>🗂️ 리포트 자동 축적 + 월간 요약</h2>
+<button onclick="showMonthlyReport()" style="padding:8px 16px;">📆 월간 요약 보기</button>
+<div id="monthlyReport" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function showMonthlyReport() {
+  const data = JSON.parse(localStorage.getItem("agrinexus_crm") || "[]");
+  const now = new Date();
+  const month = now.getMonth();
+  const filtered = data.filter(entry => new Date(entry.time).getMonth() === month);
+  const users = [...new Set(filtered.map(e => e.user))];
+  const report = `📆 ${now.getFullYear()}년 ${month + 1}월 기준 CRM 응답 수: ${filtered.length}\n사용자 수: ${users.length}\n`;
+  document.getElementById("monthlyReport").innerText = report;
+}
+</script>
+
+<hr style="margin:40px 0;">
+<h2>📬 보고서 자동 이메일 전송 (시뮬레이션)</h2>
+<input type="email" id="reportEmail" placeholder="받는 이메일 주소" style="padding:8px;width:300px;" />
+<button onclick="sendMonthlyReport()" style="padding:8px 16px;">📤 이메일 전송</button>
+<div id="emailReportStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+
+<script>
+function sendMonthlyReport() {
+  const email = document.getElementById("reportEmail").value.trim();
+  if (!email) return alert("이메일 주소를 입력해 주세요.");
+  document.getElementById("emailReportStatus").innerText = "📤 보고서 전송 중...";
+  setTimeout(() => {
+    document.getElementById("emailReportStatus").innerText = `✅ ${email} 으로 보고서 전송 완료! (시뮬레이션)`;
+  }, 1500);
+}
+</script>
+
 </body>
+
 
 
 
