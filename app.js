@@ -1,16 +1,5 @@
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js');
-    });
-}
 
-function generateProposal() {
-    alert('📄 Generating Proposal... (AI-based system placeholder)');
-    // Here you'd integrate an actual AI system or API
+function generatePDF() {
+    alert("계약서 PDF가 자동 생성되고 이메일로 발송됩니다.");
+    // PDF 생성 및 메일 발송 API 연결 예정
 }
-
-document.getElementById('emailForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    alert(`📧 Proposal will be sent to: ${email} (Mail API integration placeholder)`);
-});
