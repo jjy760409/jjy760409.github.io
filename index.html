@@ -1,57 +1,28 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World – 통합 비즈니스 자동 수익 시스템</title>
-  <script src="business.js" defer></script>
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#003366"/>
-  <style>
-    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
-    .section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-    h2 { color: #003366; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #e0e0e0; }
-    button { padding: 6px 12px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriNexus World</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="section">
-    <h2>💸 실시간 자동 수익 요약</h2>
-    <div id="summary"></div>
-  </div>
-
-  <div class="section">
-    <h2>📅 매출/수익 내역</h2>
-    <table>
-      <thead><tr><th>날짜</th><th>매출</th><th>비용</th><th>순이익</th></tr></thead>
-      <tbody id="revenueTable"></tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>🧾 계약서 PDF 과금 다운로드</h2>
-    <p>아래 버튼 클릭 시 계약서를 다운로드하며 과금이 발생합니다.</p>
-    <button onclick="downloadPDF()">📥 계약서 다운로드 (₩9,900)</button>
-  </div>
-
-  <div class="section">
-    <h2>💳 유료 결제 연동 (QR 예시)</h2>
-    <img src="kakaopay-qr.png" width="200" alt="QR결제"/>
-    <p>결제 후 자동으로 계약 열람 권한이 부여됩니다.</p>
-  </div>
-
-  <div class="section">
-    <h2>📜 히스토리 로그 (계약 열람/다운로드 이력)</h2>
-    <ul id="logList"></ul>
-  </div>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
-  </script>
+    <header>
+        <h1>Welcome to AgriNexus World</h1>
+        <p>Your Gateway to Global Smart Farming Innovation</p>
+    </header>
+    <main>
+        <section>
+            <h2>Our Vision</h2>
+            <p>Connecting AI, Smart Farms, and Global Logistics in One Automated Platform.</p>
+        </section>
+        <section>
+            <h2>Get Started</h2>
+            <a href="/dashboard.html" class="button">Explore Dashboard</a>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 AgriNexus World. All rights reserved.</p>
+    </footer>
 </body>
 </html>
