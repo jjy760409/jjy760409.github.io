@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus 앱 설치 안내</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#003366"/>
+  <style>
+    body { font-family: Arial; text-align: center; background: #eef3f9; padding: 40px; }
+    .app-box { background: white; padding: 30px; border-radius: 12px; display: inline-block; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <div class="app-box">
+    <h2>📱 AgriNexus World 앱 설치</h2>
+    <p>모바일 브라우저에서 홈 화면에 추가하여 앱처럼 사용할 수 있습니다.</p>
+    <p>설치 안내는 기기에서 자동 표시됩니다.</p>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>

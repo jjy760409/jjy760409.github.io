@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus Multilingual Contract Generator</title>
+  <style>
+    body { font-family: Arial; padding: 30px; background: #f2f2f2; }
+    .section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 0 6px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h2>🌐 계약 자동 번역 시스템</h2>
+    <p>원하는 언어를 선택하면 계약이 자동 번역됩니다.</p>
+    <select onchange="showTranslation(this.value)">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+    <div id="contractTranslated" style="margin-top:20px;"></div>
+  </div>
+  <script>
+    const translations = {
+      ko: "이 계약은 스마트팜 시스템 납품에 관한 것입니다.",
+      en: "This contract concerns the supply of smart farm systems.",
+      ja: "この契約はスマート農業システムの供給に関するものです。",
+      vi: "Hợp đồng này liên quan đến việc cung cấp hệ thống nông trại thông minh."
+    };
+    function showTranslation(lang) {
+      document.getElementById("contractTranslated").innerText = translations[lang];
+    }
+  </script>
+</body>
+</html>
