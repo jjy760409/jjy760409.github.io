@@ -1,15 +1,15 @@
 
 [
   {
-    "title": "스마트팜 공급 계약서",
-    "content": "AgriNexus World는 귀사에 자동화 농장 시스템을 공급합니다.",
-    "deadline": "2025-05-31",
-    "level": "비밀"
+    "title": "스마트팜 수출 계약",
+    "content": "AgriNexus는 베트남 농업 협회와 수출 계약을 체결했습니다.",
+    "deadline": "2025-06-30",
+    "level": "일반"
   },
   {
-    "title": "기술 제휴 NDA",
-    "content": "기술 파트너십 관련 보안 비밀유지 계약입니다.",
-    "deadline": "2025-06-10",
-    "level": "정부"
+    "title": "AI 기반 기술 제휴 NDA",
+    "content": "양사는 AI 기술 제휴를 위한 비밀유지 계약(NDA)을 체결합니다.",
+    "deadline": "2025-07-15",
+    "level": "비밀"
   }
 ]

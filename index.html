@@ -3,15 +3,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 계약 시스템</title>
+  <title>AgriNexus 계약 자동화 시스템</title>
   <script src="contracts.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
-    .contract { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    body { font-family: Arial; background:#f9f9f9; padding: 20px; }
+    .contract { background:#fff; padding:20px; margin:20px 0; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    button { padding: 6px 12px; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <h1>📄 계약 리스트 (자동 반영)</h1>
-  <div id="contractList">⏳ 계약 데이터를 불러오는 중...</div>
+  <h1>📄 AgriNexus 계약 시스템 (실시간 자동 반영)</h1>
+  <div id="contractList">계약 데이터를 불러오는 중...</div>
 </body>
 </html>

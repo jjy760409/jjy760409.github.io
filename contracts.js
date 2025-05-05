@@ -10,8 +10,15 @@ async function loadContracts() {
       <p>🧾 내용: ${c.content}</p>
       <p>🗓 마감일: ${c.deadline}</p>
       <p>🔒 보안등급: ${c.level}</p>
+      <button onclick="savePDF('${c.title}', \`${c.content}\`, '${c.deadline}', '${c.level}')">📥 PDF 저장</button>
     </div>`;
   }
   document.getElementById("contractList").innerHTML = html;
 }
 window.onload = loadContracts;
+
+function savePDF(title, content, deadline, level) {
+  const element = document.createElement("div");
+  element.innerHTML = `<h2>${title}</h2><p>${content}</p><p>마감일: ${deadline}</p><p>보안등급: ${level}</p>`;
+  html2pdf().from(element).save(`${title}_계약서.pdf`);
+}
