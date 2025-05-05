@@ -3,77 +3,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World - Smart Farming Platform</title>
-  <link href="style.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #2f855a;
+      --secondary: #38a169;
+      --bg: #f0f4f8;
+      --text: #1a202c;
+      --card-bg: rgba(255,255,255,0.95);
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: 0.3s ease;
+    }
+    header {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      padding: 1.5rem;
+      color: white;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .content {
+      max-width: 960px;
+      margin: auto;
+      padding: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.875rem;
+      color: #718096;
+      padding: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+  <header>AgriNexus World</header>
+  <div class="content">
+    <div class="card">
+      <h2>💡 AI Business Proposal Generator</h2>
+      <p>This AI engine generates smart, customized investor proposals based on your business idea and region. Just enter your focus:</p>
+      <form onsubmit="generateProposal(); return false;">
+        <input type="text" id="idea" placeholder="Enter your smart farm idea" required />
+        <textarea id="proposalOutput" placeholder="Generated proposal will appear here..." rows="6"></textarea>
+        <button type="submit">Generate Proposal</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>📩 Investor Email Auto-Send</h2>
+      <p>Enter your email and send the generated proposal directly to potential investors.</p>
+      <form onsubmit="sendEmail(); return false;">
+        <input type="email" id="email" placeholder="Investor email address" required />
+        <button type="submit">Send Proposal via Email</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer">&copy; 2025 AgriNexus World. All rights reserved.</div>
 
-  <link rel="manifest" href="manifest.json" />
-  <script src="ai-suggestion.js"></script>
-  <script src="mail-dispatch.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+    function generateProposal() {
+      const idea = document.getElementById("idea").value;
+      const output = document.getElementById("proposalOutput");
+      output.value = "Dear Investor,\n\nWe are excited to introduce a cutting-edge solution in smart farming: " + idea + 
+        ". Our AI-powered platform ensures precision agriculture, optimal yields, and sustainable methods tailored for global environments.\n\nRegards,\nAgriNexus World";
+    }
+
+    function sendEmail() {
+      const email = document.getElementById("email").value;
+      const proposal = document.getElementById("proposalOutput").value;
+      alert("Proposal sent to: " + email + "\n\n(📌 Note: Actual email integration requires server-side setup.)");
     }
   </script>
-</head>
-
-<body>
-  <header>
-    <h1>AgriNexus World</h1>
-    <p>The Fully Automated Smart Farm Business Platform</p>
-    <nav>
-      <a href="#planner">📈 Business Planner</a>
-      <a href="#generator">🔧 Project Generator</a>
-      <a href="#dashboard">📊 Dashboard</a>
-    </nav>
-  </header>
-
-  <main>
-    <section id="planner">
-      <h2>📈 Auto Business Plan Generator</h2>
-      <p>Generate a full investor-ready smart farm business plan in seconds.</p>
-      <button onclick="alert('Business Plan Generated! ✅')">Generate Plan</button>
-    </section>
-
-    <section id="generator">
-      <h2>🔧 Smart Farm Project Designer</h2>
-      <p>Automatically create real-world implementable designs and deployment plans.</p>
-      <button onclick="alert('Smart Farm Design Ready! 🚀')">Start Design</button>
-    </section>
-
-    <section id="dashboard">
-      <h2>📊 Real-Time Management Dashboard</h2>
-      <p>Monitor, manage, and control your smart farm automatically.</p>
-      <ul>
-        <li>🌍 Global Control System</li>
-        <li>📑 Contract/Document Automation</li>
-        <li>🔐 AI-Security Monitoring</li>
-      </ul>
-    </section>
-  
-    <section id="ir">
-      <h2>🌍 글로벌 IR 사업계획서 자동 생성기</h2>
-      <p>전세계 투자자에게 어필할 수 있는 완전 자동화된 계획서를 생성합니다.</p>
-      <button onclick="alert('IR 사업계획서가 생성되었습니다! 🌐')">IR 계획서 생성</button>
-    </section>
-    
-    <section id="ai">
-      <h2>🧠 AI 자동 제안 시스템</h2>
-      <p>고객, 파트너, 투자자에게 맞춤 전략을 자동 제시합니다.</p>
-      <button onclick="getAISuggestion()">AI 제안 받기</button>
-    </section>
-
-    <section id="mail">
-      <h2>📨 투자자 메일 자동 발송</h2>
-      <p>투자자 대상 보고서를 클릭 한 번으로 발송하세요.</p>
-      <button onclick="sendInvestorMail()">IR 메일 발송</button>
-    </section>
-    </main>
-    
-    
-
-  <footer>
-    <p>&copy; 2025 AgriNexus World. All rights reserved.</p>
-  </footer>
 </body>
 </html>
