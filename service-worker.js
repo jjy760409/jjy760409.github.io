@@ -1,8 +1,20 @@
-
-self.addEventListener('install', function(e) {
-  console.log('AgriNexus Service Worker Installed');
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open('agri-cache').then(cache => {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/styles.css',
+                '/app.js'
+            ]);
+        })
+    );
 });
 
-self.addEventListener('fetch', function(e) {
-  e.respondWith(fetch(e.request));
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request).then(response => {
+            return response || fetch(event.request);
+        })
+    );
 });

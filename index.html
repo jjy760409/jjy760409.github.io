@@ -1,63 +1,15 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AgriNexus 투자 계약 자동화</title>
+    <title>AgriNexus World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f8fb; margin: 0; padding: 2em; color: #333; }
-        .container { max-width: 800px; margin: auto; background: #fff; padding: 2em; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        h1 { color: #2a7ae2; }
-        label { margin-top: 1em; display: block; }
-        input, select, textarea, button { width: 100%; padding: 0.8em; margin-top: 0.3em; border-radius: 6px; border: 1px solid #ccc; }
-        button { background-color: #2a7ae2; color: white; font-weight: bold; border: none; cursor: pointer; }
-        button:hover { background-color: #1e5fb4; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>AgriNexus 투자 계약 자동 생성</h1>
-        <form name="investor-form" netlify netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
-            <input type="hidden" name="form-name" value="investor-form">
-            <p hidden><label>Don’t fill this out: <input name="bot-field"></label></p>
-
-            <label>투자자 이름:</label>
-            <input type="text" name="investor_name" required>
-
-            <label>이메일:</label>
-            <input type="email" name="email" required>
-
-            <label>투자 유형:</label>
-            <select name="investment_type" required>
-                <option value="지분 투자">지분 투자</option>
-                <option value="프로젝트 투자">프로젝트 투자</option>
-                <option value="기술 투자">기술 투자</option>
-            </select>
-
-            <label>투자 금액 (₩):</label>
-            <input type="number" name="amount" required>
-
-            <label>비고:</label>
-            <textarea name="notes"></textarea>
-
-            <button type="submit">📄 계약서 생성 + PDF 발송</button>
-        </form>
-    </div>
-
-    <script>
-    function handleSubmit(event) {
-        event.preventDefault();
-        const form = event.target;
-        const data = new FormData(form);
-        const entries = Object.fromEntries(data.entries());
-
-        // Placeholder for AI analysis / PDF creation / email logic
-        alert("✅ 계약서가 생성되어 PDF로 이메일로 발송됩니다. 감사합니다!");
-
-        form.submit(); // For Netlify form handling
-    }
-    </script>
+    <h1>Welcome to AgriNexus World</h1>
+    <p>Your AI-powered smart farm and global investment platform.</p>
 </body>
 </html>
