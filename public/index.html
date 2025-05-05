@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#4CAF50"/>
+  <link rel="manifest" href="/manifest.json" />
+  <title>AgriNexus Logistics AI</title>
+</head>
+<body>
+  <h1>📦 AgriNexus Logistics AI System</h1>
+  <p>국가/도시별 물류, 배송, 특송 자동화 서비스</p>
+  <ul>
+    <li>🚚 실시간 경로 및 물류사 추천</li>
+    <li>📄 계약서 PDF 자동 생성 + 메일 발송</li>
+    <li>📱 PWA 앱 설치 지원</li>
+    <li>🤖 AI 물류 최적화 추천</li>
+  </ul>
+  <button onclick="installPWA()">📲 설치하기</button>
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+        });
+      }
+    }
+  </script>
+</body>
+</html>
