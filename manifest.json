@@ -1,16 +1,14 @@
 
 {
-  "name": "AgriNexus World Contract System",
-  "short_name": "AgriNexus Contract",
-  "start_url": ".",
+  "name": "AgriNexus World",
+  "short_name": "AgriNexus",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "description": "PWA 기반 계약 자동화 플랫폼",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
+  "description": "Smart Farm Global Automation Platform",
+  "icons": [{
+    "src": "icon.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
 }
