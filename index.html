@@ -6,7 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgriNexus World - Smart Farming Platform</title>
   <link href="style.css" rel="stylesheet" />
+
+  <link rel="manifest" href="manifest.json" />
+  <script src="ai-suggestion.js"></script>
+  <script src="mail-dispatch.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
 </head>
+
 <body>
   <header>
     <h1>AgriNexus World</h1>
@@ -46,7 +56,20 @@
       <p>전세계 투자자에게 어필할 수 있는 완전 자동화된 계획서를 생성합니다.</p>
       <button onclick="alert('IR 사업계획서가 생성되었습니다! 🌐')">IR 계획서 생성</button>
     </section>
+    
+    <section id="ai">
+      <h2>🧠 AI 자동 제안 시스템</h2>
+      <p>고객, 파트너, 투자자에게 맞춤 전략을 자동 제시합니다.</p>
+      <button onclick="getAISuggestion()">AI 제안 받기</button>
+    </section>
+
+    <section id="mail">
+      <h2>📨 투자자 메일 자동 발송</h2>
+      <p>투자자 대상 보고서를 클릭 한 번으로 발송하세요.</p>
+      <button onclick="sendInvestorMail()">IR 메일 발송</button>
+    </section>
     </main>
+    
     
 
   <footer>
