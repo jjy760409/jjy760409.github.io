@@ -2,104 +2,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World</title>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f0f4f8;
-      color: #1a202c;
-    }
-    header {
-      background: linear-gradient(to right, #2f855a, #38a169);
-      padding: 1.5rem;
-      color: white;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-    }
-    .content {
-      max-width: 960px;
-      margin: auto;
-      padding: 2rem;
-    }
-    .card {
-      background: rgba(255,255,255,0.95);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      margin-bottom: 2rem;
-    }
-    textarea, input, button {
-      width: 100%;
-      padding: 0.8rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    button {
-      background: #2f855a;
-      color: white;
-      border: none;
-    }
-    button:hover {
-      background: #38a169;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.875rem;
-      color: #718096;
-      padding: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>AgriNexus Investor Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f8fb; margin: 0; padding: 2em; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2em; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        h1 { color: #2a7ae2; }
+        label { display: block; margin-top: 1em; }
+        input, select, textarea, button { width: 100%; padding: 0.8em; margin-top: 0.3em; border-radius: 6px; border: 1px solid #ccc; }
+        button { background-color: #2a7ae2; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background-color: #1e5fb4; }
+    </style>
 </head>
 <body>
-  <header>AgriNexus World</header>
-  <div class="content">
-    <div class="card">
-      <h2>💡 AI Proposal Generator</h2>
-      <input type="text" id="idea" placeholder="Enter your idea">
-      <textarea id="proposal" rows="5" placeholder="Generated proposal..."></textarea>
-      <button onclick="generateProposal()">Generate</button>
+    <div class="container">
+        <h1>AgriNexus 투자자 계약 시스템</h1>
+        <form action="/generate_contract" method="post">
+            <label>투자자 이름:</label>
+            <input type="text" name="investor_name" required>
+
+            <label>이메일:</label>
+            <input type="email" name="email" required>
+
+            <label>투자 유형:</label>
+            <select name="investment_type">
+                <option value="equity">지분 투자</option>
+                <option value="project">프로젝트 투자</option>
+                <option value="technology">기술 투자</option>
+            </select>
+
+            <label>투자 금액 (₩):</label>
+            <input type="number" name="amount" required>
+
+            <label>비고:</label>
+            <textarea name="notes" placeholder="추가 요청사항 또는 조건"></textarea>
+
+            <button type="submit">📄 계약서 자동 생성</button>
+        </form>
     </div>
-    <div class="card">
-      <h2>📄 Export Proposal as PDF</h2>
-      <button onclick="exportPDF()">Download PDF</button>
-    </div>
-    <div class="card">
-      <h2>📨 Send to Investor</h2>
-      <input type="email" id="email" placeholder="Investor email">
-      <button onclick="sendProposal()">Send Email</button>
-    </div>
-  </div>
-  <div class="footer">&copy; 2025 AgriNexus World</div>
-
-  <script>
-    function generateProposal() {
-      const idea = document.getElementById('idea').value;
-      const output = document.getElementById('proposal');
-      output.value = "Dear Investor,\n\nIntroducing: " + idea +
-      ". A breakthrough in smart agriculture for sustainability and profitability.\n\nAgriNexus World";
-    }
-
-    function exportPDF() {
-      alert("📄 PDF generated (simulated). Server-side PDF integration required for full feature.");
-    }
-
-    function sendProposal() {
-      const email = document.getElementById('email').value;
-      alert("📨 Proposal sent to " + email + " (simulation). Actual integration pending backend setup.");
-    }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
 </body>
 </html>
