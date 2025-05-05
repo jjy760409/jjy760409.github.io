@@ -1,2 +1,2 @@
-[27단계] AgriNexus World 글로벌 MVP 배포 자동화 시스템
-ZIP, 데모 URL, GitHub, Netlify를 통한 전자동화 배포 지원 기능 포함.
+[28단계] AgriNexus World 투자자용 자동화 사업계획서 생성 시스템
+AI 기반 맞춤형 사업계획서를 자동 생성하여 투자자에게 제출 가능.
