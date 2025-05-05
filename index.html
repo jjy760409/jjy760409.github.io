@@ -2,32 +2,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AgriNexus World</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"/>
   <style>
-    :root {
-      --primary: #2f855a;
-      --secondary: #38a169;
-      --bg: #f0f4f8;
-      --text: #1a202c;
-      --card-bg: rgba(255,255,255,0.95);
-    }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: 0.3s ease;
+      background: #f0f4f8;
+      color: #1a202c;
     }
     header {
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+      background: linear-gradient(to right, #2f855a, #38a169);
       padding: 1.5rem;
       color: white;
       text-align: center;
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: bold;
     }
     .content {
       max-width: 960px;
@@ -35,15 +28,28 @@
       padding: 2rem;
     }
     .card {
-      background: var(--card-bg);
+      background: rgba(255,255,255,0.95);
       padding: 2rem;
       border-radius: 1.5rem;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
       margin-bottom: 2rem;
     }
-    .card h2 {
-      color: var(--primary);
-      margin-top: 0;
+    textarea, input, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background: #2f855a;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background: #38a169;
     }
     .footer {
       text-align: center;
@@ -51,66 +57,48 @@
       color: #718096;
       padding: 1rem;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    input, textarea {
-      padding: 0.8rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    button {
-      background: var(--primary);
-      color: white;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
-    button:hover {
-      background: var(--secondary);
-    }
   </style>
 </head>
 <body>
   <header>AgriNexus World</header>
   <div class="content">
     <div class="card">
-      <h2>💡 AI Business Proposal Generator</h2>
-      <p>This AI engine generates smart, customized investor proposals based on your business idea and region. Just enter your focus:</p>
-      <form onsubmit="generateProposal(); return false;">
-        <input type="text" id="idea" placeholder="Enter your smart farm idea" required />
-        <textarea id="proposalOutput" placeholder="Generated proposal will appear here..." rows="6"></textarea>
-        <button type="submit">Generate Proposal</button>
-      </form>
+      <h2>💡 AI Proposal Generator</h2>
+      <input type="text" id="idea" placeholder="Enter your idea">
+      <textarea id="proposal" rows="5" placeholder="Generated proposal..."></textarea>
+      <button onclick="generateProposal()">Generate</button>
     </div>
     <div class="card">
-      <h2>📩 Investor Email Auto-Send</h2>
-      <p>Enter your email and send the generated proposal directly to potential investors.</p>
-      <form onsubmit="sendEmail(); return false;">
-        <input type="email" id="email" placeholder="Investor email address" required />
-        <button type="submit">Send Proposal via Email</button>
-      </form>
+      <h2>📄 Export Proposal as PDF</h2>
+      <button onclick="exportPDF()">Download PDF</button>
+    </div>
+    <div class="card">
+      <h2>📨 Send to Investor</h2>
+      <input type="email" id="email" placeholder="Investor email">
+      <button onclick="sendProposal()">Send Email</button>
     </div>
   </div>
-  <div class="footer">&copy; 2025 AgriNexus World. All rights reserved.</div>
+  <div class="footer">&copy; 2025 AgriNexus World</div>
 
   <script>
     function generateProposal() {
-      const idea = document.getElementById("idea").value;
-      const output = document.getElementById("proposalOutput");
-      output.value = "Dear Investor,\n\nWe are excited to introduce a cutting-edge solution in smart farming: " + idea + 
-        ". Our AI-powered platform ensures precision agriculture, optimal yields, and sustainable methods tailored for global environments.\n\nRegards,\nAgriNexus World";
+      const idea = document.getElementById('idea').value;
+      const output = document.getElementById('proposal');
+      output.value = "Dear Investor,\n\nIntroducing: " + idea +
+      ". A breakthrough in smart agriculture for sustainability and profitability.\n\nAgriNexus World";
     }
 
-    function sendEmail() {
-      const email = document.getElementById("email").value;
-      const proposal = document.getElementById("proposalOutput").value;
-      alert("Proposal sent to: " + email + "\n\n(📌 Note: Actual email integration requires server-side setup.)");
+    function exportPDF() {
+      alert("📄 PDF generated (simulated). Server-side PDF integration required for full feature.");
+    }
+
+    function sendProposal() {
+      const email = document.getElementById('email').value;
+      alert("📨 Proposal sent to " + email + " (simulation). Actual integration pending backend setup.");
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
     }
   </script>
 </body>
