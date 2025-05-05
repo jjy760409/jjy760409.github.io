@@ -1,15 +1,15 @@
 
 [
   {
-    "title": "스마트팜 수출 계약",
-    "content": "AgriNexus는 베트남 농업 협회와 수출 계약을 체결했습니다.",
-    "deadline": "2025-06-30",
-    "level": "일반"
+    "title": "글로벌 스마트팜 공급 계약",
+    "content": "AgriNexus는 유럽연합 농업 기술센터와 전략적 공급 계약을 체결합니다.",
+    "deadline": "2025-12-01",
+    "level": "정부"
   },
   {
-    "title": "AI 기반 기술 제휴 NDA",
-    "content": "양사는 AI 기술 제휴를 위한 비밀유지 계약(NDA)을 체결합니다.",
-    "deadline": "2025-07-15",
+    "title": "AI 농업 자동화 공동 개발 MOU",
+    "content": "세계 5개국과 AI 기반 농업 인프라 개발 협약을 체결합니다.",
+    "deadline": "2025-09-30",
     "level": "비밀"
   }
 ]
