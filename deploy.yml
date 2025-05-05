@@ -1,5 +1,5 @@
 
-name: Deploy Secure Site
+name: Deploy Global Secure Site
 
 on:
   push:

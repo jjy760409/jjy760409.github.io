@@ -3,22 +3,28 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World – 글로벌 최상위 보안 계약 시스템</title>
+  <title>AgriNexus World – 글로벌 보안 확장 시스템</title>
   <script src="contracts.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { font-family: Arial; background:#f4f4f4; padding: 30px; }
     .contract { background:#fff; padding:20px; margin:20px 0; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
-    .banner { background:linear-gradient(90deg,#00264d,#004080); color:#fff; padding:15px 20px; border-radius:10px; margin-bottom:30px; }
-    .secure { font-size:0.9rem; color:#c00; margin-top:10px; }
+    .banner { background:linear-gradient(90deg,#001933,#004466); color:#fff; padding:15px 20px; border-radius:10px; margin-bottom:30px; }
+    .secure { font-size:0.9rem; color:#d00; margin-top:10px; }
   </style>
 </head>
 <body>
   <div class="banner">
-    <h1>🌍 AgriNexus World</h1>
-    <p>세계 최고의 스마트 계약 시스템 – AI, 보안, 자동화로 완전 보호됩니다.</p>
+    <h1>🛡️ AgriNexus Global Secure AI</h1>
+    <p>🌍 최고 보안 등급 시스템 | AI 감시 | 해킹 탐지 | 변경 로그 추적 | 자동 복원</p>
   </div>
 
-  <div id="contractList">🔐 보안 계약 데이터를 불러오는 중입니다...</div>
+  <div id="authArea">
+    <input type="password" id="adminPass" placeholder="🔐 관리자 암호 입력" />
+    <button onclick="verifyLogin()">접속</button>
+    <div id="accessDenied" style="color:red;margin-top:10px;"></div>
+  </div>
+
+  <div id="contractList" style="display:none;">⏳ 계약 데이터를 불러오는 중...</div>
 </body>
 </html>
