@@ -1,2 +1,2 @@
-[126단계] AgriNexus World One-Stop A/S 전략 자동화 시스템 (One Care, One Store, One Membership, One Life)
-A/S 지원, 부품 관리, 회원 혜택, 라이프 연계 서비스를 전자동화한 전략 플랫폼입니다.
+[127단계] AgriNexus World 고성능 플랫폼 UI 벤치마킹 기반 프리미엄 디자인 업그레이드 시스템
+우수한 UI/UX 플랫폼을 벤치마킹하여 디자인을 자동 최적화하고 적용하는 프리미엄 시스템입니다.
