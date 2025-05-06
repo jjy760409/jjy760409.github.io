@@ -1,2 +1,2 @@
-[125단계] AgriNexus World 자동 저장 + 버전 추적 + 연속 업데이트 시스템
-모든 변경 내용을 자동 저장하고 버전 관리 및 자동 반영을 지원하는 시스템입니다.
+[126단계] AgriNexus World One-Stop A/S 전략 자동화 시스템 (One Care, One Store, One Membership, One Life)
+A/S 지원, 부품 관리, 회원 혜택, 라이프 연계 서비스를 전자동화한 전략 플랫폼입니다.
