@@ -1,2 +1,2 @@
-[119단계] AgriNexus World 매뉴얼 HTML 버전 + AI 웹앱 자동 생성 시스템
-사용자 매뉴얼을 웹/앱으로 동시에 자동 생성하여 검색 가능한 AI 도우미와 통합하는 시스템입니다.
+[120단계] AgriNexus World ZIP, 웹앱, GitHub 연동 자동 배포 시스템
+ZIP 파일, 웹앱, GitHub Pages를 동기화하고 자동 배포하는 멀티채널 자동화 시스템입니다.
